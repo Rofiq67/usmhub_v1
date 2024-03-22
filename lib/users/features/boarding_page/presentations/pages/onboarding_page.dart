@@ -14,7 +14,7 @@ class OnboardingPage extends StatefulWidget {
 }
 
 class _OnboardingPageState extends State<OnboardingPage> {
-  PageController _pageController = new PageController();
+  final PageController _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
