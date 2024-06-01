@@ -1,14 +1,14 @@
-import 'dart:ffi';
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 // import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:usmhub_v1/controllers/auth.dart';
+import 'package:usmhub_v1/features/registration_page/domains/controllers/auth.dart';
 import 'package:usmhub_v1/features/registration_page/presentations/pages/login_page.dart';
-import 'package:usmhub_v1/features/registration_page/presentations/widgets/btn_widget.dart';
+import 'package:usmhub_v1/features/registration_page/presentations/widgets/dropdown_btn.dart';
 import 'package:usmhub_v1/features/registration_page/presentations/widgets/input_widget.dart';
 
 class SignupPage extends StatefulWidget {
@@ -30,8 +30,11 @@ class _SignupPageState extends State<SignupPage> {
   final AuthController _authController = Get.put(AuthController());
 
   DateTime _selectedDate = DateTime.now();
+  String? _selectedProgdi;
+  String? _selectedGender;
 
   // Fungsi untuk menampilkan date picker
+  // ignore: unused_element
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -48,6 +51,18 @@ class _SignupPageState extends State<SignupPage> {
           .split(' ')[0]; // Atur tanggal yang dipilih pada input controller
     }
   }
+
+  static const progdiOptions = [
+    'Teknik Informatika',
+    'Sistem Informasi',
+    'Ilmu Komunikasi',
+    'Pariwisata',
+  ];
+
+  static const genderOptions = [
+    'Laki-laki',
+    'Perempuan',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -153,20 +168,29 @@ class _SignupPageState extends State<SignupPage> {
                   const SizedBox(
                     height: 8,
                   ),
-                  InputWidget(
-                    hintTxt: 'Program Studi',
-                    controller: _progdiController,
-                    obsureTxt: false,
+                  DropdownBtn(
+                    hint: 'Program Studi',
+                    value: _selectedProgdi,
+                    items: progdiOptions,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedProgdi = newValue!;
+                      });
+                    },
                     prefixIcon: Iconsax.teacher,
-                    // suffixIcon: Iconsax.back_square,
                   ),
                   const SizedBox(
                     height: 8,
                   ),
-                  InputWidget(
-                    hintTxt: 'Jenis Kelamin',
-                    controller: _genderController,
-                    obsureTxt: false,
+                  DropdownBtn(
+                    hint: 'Jenis Kelamin',
+                    value: _selectedGender,
+                    items: genderOptions,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedGender = newValue!;
+                      });
+                    },
                     prefixIcon: Iconsax.man,
                   ),
                   const SizedBox(

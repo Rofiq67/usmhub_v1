@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:usmhub_v1/main.dart';
 
 class SentPengaduan extends StatefulWidget {
   const SentPengaduan({super.key});
@@ -24,12 +28,11 @@ class _SentPengaduanState extends State<SentPengaduan> {
             const SizedBox(
               height: 32,
             ),
-            const Text(
+            Text(
               'Pengaduan Terkirim',
-              style: TextStyle(
+              style: GoogleFonts.poppins(
                 color: Colors.black,
                 fontSize: 24,
-                fontFamily: 'Poppins',
                 fontWeight: FontWeight.w500,
                 height: 0,
                 letterSpacing: 0.48,
@@ -38,15 +41,14 @@ class _SentPengaduanState extends State<SentPengaduan> {
             const SizedBox(
               height: 16,
             ),
-            const SizedBox(
+            SizedBox(
               width: 353,
               child: Text(
-                'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia.',
+                'Terima kasih atas aduan Anda. Kami akan segera memprosesnya.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   color: Colors.black,
                   fontSize: 16,
-                  fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
                   height: 0,
                   letterSpacing: 0.32,
@@ -57,17 +59,18 @@ class _SentPengaduanState extends State<SentPengaduan> {
               height: 95,
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.offAll(() => const MainPage()); // Alihkan ke halaman utama
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff3E4095),
                 fixedSize: const Size(353, 60),
               ),
-              child: const Text(
+              child: Text(
                 'Selesai',
-                style: TextStyle(
-                  color: Color(0xFFF9F9F9),
+                style: GoogleFonts.poppins(
+                  color: const Color(0xFFF9F9F9),
                   fontSize: 16,
-                  fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   height: 0,
                   letterSpacing: 0.32,

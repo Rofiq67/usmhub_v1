@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/aspirasi.dart';
 import 'package:usmhub_v1/features/home_page/presentations/widgets/banner_widget.dart';
 import 'package:usmhub_v1/features/home_page/presentations/widgets/info_widget.dart';
+import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/pengaduan.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -72,7 +75,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 InkWell(
                   onTap: () {
-                    // print('active');
+                    Get.to(() => const Pengaduan());
                   },
                   borderRadius: BorderRadius.circular(12),
                   child: Container(
@@ -119,6 +122,7 @@ class _HomePageState extends State<HomePage> {
                 InkWell(
                   onTap: () {
                     // print('active');
+                    Get.to(() => const AspirasiPage());
                   },
                   borderRadius: BorderRadius.circular(12),
                   child: Container(

@@ -11,6 +11,7 @@ class InputWidget extends StatelessWidget {
     this.suffixIcon,
     this.sizeTxt = 16,
     this.onTap,
+    this.read = false,
   });
 
   final String hintTxt;
@@ -20,6 +21,7 @@ class InputWidget extends StatelessWidget {
   final IconData? suffixIcon;
   final double sizeTxt;
   final VoidCallback? onTap;
+  final bool read;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,7 @@ class InputWidget extends StatelessWidget {
             height: 0,
             letterSpacing: 0.32,
           ),
+          readOnly: read,
           decoration: InputDecoration(
             prefixIconColor: const Color(0xff3E4095),
             prefixIcon: Padding(

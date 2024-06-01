@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/post_pengaduan.dart';
+import 'form_pengaduan1.dart';
+import 'package:usmhub_v1/features/pengaduan_page/data/models/aduan_models.dart';
 
 class Pengaduan extends StatefulWidget {
   const Pengaduan({super.key});
@@ -15,9 +20,14 @@ class _PengaduanState extends State<Pengaduan> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: const Color(0xfff5f5f5),
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 20),
-          child: Icon(Iconsax.arrow_left),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: const Icon(Iconsax.arrow_left),
+          ),
         ),
       ),
       body: Padding(
@@ -28,12 +38,11 @@ class _PengaduanState extends State<Pengaduan> {
             const SizedBox(
               height: 32,
             ),
-            const Text(
+            Text(
               'Petunjuk Pengaduan',
-              style: TextStyle(
+              style: GoogleFonts.poppins(
                 color: Colors.black,
                 fontSize: 24,
-                fontFamily: 'Poppins',
                 fontWeight: FontWeight.w500,
                 height: 0,
                 letterSpacing: 0.48,
@@ -42,14 +51,13 @@ class _PengaduanState extends State<Pengaduan> {
             const SizedBox(
               height: 16,
             ),
-            const SizedBox(
+            SizedBox(
               width: 352,
               child: Text(
                 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia.',
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   color: Colors.black,
                   fontSize: 16,
-                  fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
                   height: 0,
                   letterSpacing: 0.32,
@@ -70,7 +78,7 @@ class _PengaduanState extends State<Pengaduan> {
                   switch (index) {
                     case 0:
                       itemText =
-                          'Tulis laporan, atu keluhan anda dengan jelas dan lengkap.';
+                          'Tulis laporan, atau keluhan anda dengan jelas dan lengkap.';
                       break;
                     case 1:
                       itemText =
@@ -82,7 +90,7 @@ class _PengaduanState extends State<Pengaduan> {
                       break;
                     case 3:
                       itemText =
-                          'Beri tanggapan, anda dapat menanggapo kembali balasan yang diberikan oleh admin.';
+                          'Beri tanggapan, anda dapat menanggapi kembali balasan yang diberikan oleh admin.';
                       break;
                     case 4:
                       itemText =
@@ -98,10 +106,9 @@ class _PengaduanState extends State<Pengaduan> {
                       children: [
                         Text(
                           '$itemNumber. ',
-                          style: const TextStyle(
+                          style: GoogleFonts.poppins(
                             color: Colors.black,
                             fontSize: 16,
-                            fontFamily: 'Poppins',
                             fontWeight: FontWeight.w500,
                             height: 0,
                             letterSpacing: 0.32,
@@ -110,10 +117,9 @@ class _PengaduanState extends State<Pengaduan> {
                         Expanded(
                           child: Text(
                             itemText,
-                            style: const TextStyle(
+                            style: GoogleFonts.poppins(
                               color: Colors.black,
                               fontSize: 16,
-                              fontFamily: 'Poppins',
                               fontWeight: FontWeight.w400,
                               height: 0,
                               letterSpacing: 0.32,
@@ -130,17 +136,27 @@ class _PengaduanState extends State<Pengaduan> {
               height: 64,
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                // // Navigasi langsung ke halaman FormPengaduan1
+                // Get.to(() => FormPengaduan1(
+                //       onSelectCategory: (String selectedCategory) {
+                //         // Anda bisa tambahkan logika terkait pilihan kategori di sini
+                //       },
+                //       onNext: () {
+                //         // Logika jika ingin menambahkan aksi setelah menekan tombol "Selanjutnya"
+                //       },
+                //     ));
+                Get.to(() => const PostPengaduan());
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff3E4095),
                 fixedSize: const Size(353, 60),
               ),
-              child: const Text(
+              child: Text(
                 'Mulai',
-                style: TextStyle(
-                  color: Color(0xFFF9F9F9),
+                style: GoogleFonts.poppins(
+                  color: const Color(0xFFF9F9F9),
                   fontSize: 16,
-                  fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   height: 0,
                   letterSpacing: 0.32,

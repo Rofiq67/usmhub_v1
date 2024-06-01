@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:usmhub_v1/features/registration_page/domains/controllers/auth.dart';
 import 'package:usmhub_v1/features/registration_page/presentations/pages/signup_page.dart';
 import 'package:usmhub_v1/features/registration_page/presentations/widgets/btn_widget.dart';
 import 'package:usmhub_v1/features/registration_page/presentations/widgets/input_widget.dart';
@@ -18,6 +19,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final AuthController _authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -130,11 +132,39 @@ class _LoginPageState extends State<LoginPage> {
                     ),
 
                     //btn
-                    BtnWidget(
-                      txtBtn: 'Masuk',
-                      clrBtn: const Color(0xff3E4095),
-                      onPressed: () {},
-                      clrTxt: Colors.white,
+                    ElevatedButton(
+                      onPressed: () async {
+                        await _authController.loginApi(
+                          username: _usernameController.text.trim(),
+                          password: _passwordController.text.trim(),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        side: const BorderSide(
+                          color: Color(0xff3E4095),
+                          width: 2,
+                        ),
+                        backgroundColor: const Color(0xff3E4095),
+                        fixedSize: Size(MediaQuery.of(context).size.width, 60),
+                      ),
+                      child: Obx(() {
+                        return _authController.isLoading.value
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Text(
+                                'Login',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  height: 0,
+                                  letterSpacing: 0.32,
+                                ),
+                              );
+                      }),
                     ),
                     const SizedBox(
                       height: 8,

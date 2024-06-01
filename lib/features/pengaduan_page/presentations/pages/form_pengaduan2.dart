@@ -1,23 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:usmhub_v1/features/pengaduan_page/data/models/aduan_models.dart';
+import 'package:usmhub_v1/features/pengaduan_page/domains/controllers/aduan_controller.dart';
+import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/form_pengaduan3.dart';
 
 class FormPengaduan2 extends StatefulWidget {
-  const FormPengaduan2({super.key});
+  final Function(String) onSelectProgramStudi;
+  final VoidCallback onPrevious;
+  final VoidCallback onNext;
+  const FormPengaduan2({
+    super.key,
+    required this.onSelectProgramStudi,
+    required this.onPrevious,
+    required this.onNext,
+  });
 
   @override
   State<FormPengaduan2> createState() => _FormPengaduan2State();
 }
 
 class _FormPengaduan2State extends State<FormPengaduan2> {
+  String? selectedProgramStudi;
+
+  List<String> listProgdi = [
+    "Teknik Informatika",
+    "Sistem Informasi",
+    "Ilmu Komunikasi",
+    "Pariwisata",
+  ];
+
+  // final AduanController _aduanController = AduanController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         backgroundColor: const Color(0xfff5f5f5),
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 20),
-          child: Icon(Iconsax.arrow_left),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: const Icon(Iconsax.arrow_left),
+          ),
         ),
       ),
       body: Padding(
@@ -28,7 +57,7 @@ class _FormPengaduan2State extends State<FormPengaduan2> {
             const SizedBox(
               height: 32,
             ),
-            const SizedBox(
+            SizedBox(
               width: 88,
               height: 88,
               child: Column(
@@ -37,17 +66,16 @@ class _FormPengaduan2State extends State<FormPengaduan2> {
                   Text(
                     '02',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                       color: Colors.black,
                       fontSize: 64,
-                      fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
                       height: 0.01,
                       letterSpacing: 1.28,
                     ),
                   ),
-                  SizedBox(height: 29),
-                  Divider(
+                  const SizedBox(height: 29),
+                  const Divider(
                     height: 20,
                     thickness: 4,
                     indent: 40,
@@ -57,14 +85,13 @@ class _FormPengaduan2State extends State<FormPengaduan2> {
                 ],
               ),
             ),
-            const SizedBox(
+            SizedBox(
               width: 352,
               child: Text(
-                'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia.',
-                style: TextStyle(
+                'Pilih tujuan wewenang yang Anda serahkan atas laporan aduan.',
+                style: GoogleFonts.poppins(
                   color: Colors.black,
                   fontSize: 16,
-                  fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
                   height: 0,
                   letterSpacing: 0.32,
@@ -74,60 +101,115 @@ class _FormPengaduan2State extends State<FormPengaduan2> {
             const SizedBox(
               height: 32,
             ),
-            const TextField(
-              decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xff3e4095), width: 2),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(29),
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(width: 2, color: Color(0xff3E4095)),
-                    borderRadius: BorderRadius.all(Radius.circular(29))),
-                filled: true,
-                fillColor: Color(0xfff5f5f5),
-                prefixIconColor: Color(0xff3E4095),
-                prefixIcon: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 10),
-                  child: Icon(
-                    Iconsax.direct_right,
-                  ),
-                ),
-                hintText: 'Tuliskan pengaduan',
-                hintStyle: TextStyle(
-                  color: Color(0xFF757F90),
-                  fontSize: 16,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  height: 0,
-                  letterSpacing: 0.32,
+            Container(
+              width: 353,
+              height: 60,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(width: 2, color: Color(0xFF3E4095)),
+                  borderRadius: BorderRadius.circular(29),
                 ),
               ),
-              maxLines: 7,
-              minLines: 1,
-              maxLength: 250,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: selectedProgramStudi,
+                  hint: Row(
+                    children: [
+                      const Icon(
+                        Iconsax.signpost,
+                        color: Color(0xFF3E4095),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        'Pilih program studi',
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF757F90),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          height: 0,
+                          letterSpacing: 0.32,
+                        ),
+                      ),
+                    ],
+                  ),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedProgramStudi = newValue!;
+                      widget.onSelectProgramStudi(newValue);
+                    });
+                  },
+                  items:
+                      listProgdi.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: const TextStyle(
+                          color: Color(0xff1c1c1c),
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          height: 0,
+                          letterSpacing: 0.32,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
             ),
             const SizedBox(
-              height: 210,
+              height: 150,
             ),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xff3E4095),
-                fixedSize: const Size(353, 60),
-              ),
-              child: const Text(
-                'Mulai',
-                style: TextStyle(
-                  color: Color(0xFFF9F9F9),
-                  fontSize: 16,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  height: 0,
-                  letterSpacing: 0.32,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: widget.onPrevious,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff3E4095),
+                    fixedSize: const Size(353, 60),
+                  ),
+                  child: Text(
+                    'Kembalii',
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFFF9F9F9),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      height: 0,
+                      letterSpacing: 0.32,
+                    ),
+                  ),
                 ),
-              ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (selectedProgramStudi != null) {
+                      widget.onNext();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Silakan pilih program studi.'),
+                        ),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff3E4095),
+                    fixedSize: const Size(353, 60),
+                  ),
+                  child: Text(
+                    'Selanjutnya',
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFFF9F9F9),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      height: 0,
+                      letterSpacing: 0.32,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

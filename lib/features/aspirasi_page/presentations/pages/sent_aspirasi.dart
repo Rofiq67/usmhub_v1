@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:usmhub_v1/main.dart';
 
 class SentAspirasi extends StatefulWidget {
   const SentAspirasi({super.key});
@@ -24,12 +27,11 @@ class _SentAspirasiState extends State<SentAspirasi> {
             const SizedBox(
               height: 32,
             ),
-            const Text(
+            Text(
               'Aspirasi Terkirim',
-              style: TextStyle(
+              style: GoogleFonts.poppins(
                 color: Colors.black,
                 fontSize: 24,
-                fontFamily: 'Poppins',
                 fontWeight: FontWeight.w500,
                 height: 0,
                 letterSpacing: 0.48,
@@ -38,15 +40,14 @@ class _SentAspirasiState extends State<SentAspirasi> {
             const SizedBox(
               height: 16,
             ),
-            const SizedBox(
+            SizedBox(
               width: 353,
               child: Text(
                 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   color: Colors.black,
                   fontSize: 16,
-                  fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
                   height: 0,
                   letterSpacing: 0.32,
@@ -57,17 +58,18 @@ class _SentAspirasiState extends State<SentAspirasi> {
               height: 95,
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.offAll(() => const MainPage());
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff3E4095),
                 fixedSize: const Size(353, 60),
               ),
-              child: const Text(
+              child: Text(
                 'Selesai',
-                style: TextStyle(
-                  color: Color(0xFFF9F9F9),
+                style: GoogleFonts.poppins(
+                  color: const Color(0xFFF9F9F9),
                   fontSize: 16,
-                  fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   height: 0,
                   letterSpacing: 0.32,

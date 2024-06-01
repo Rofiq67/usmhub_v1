@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/aspirasi_post.dart';
+import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/post_aspirasi.dart';
 
-class Aspirasi extends StatefulWidget {
-  const Aspirasi({super.key});
+class AspirasiPage extends StatefulWidget {
+  const AspirasiPage({super.key});
 
   @override
-  State<Aspirasi> createState() => _AspirasiState();
+  State<AspirasiPage> createState() => _AspirasiPageState();
 }
 
-class _AspirasiState extends State<Aspirasi> {
+class _AspirasiPageState extends State<AspirasiPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,12 +32,11 @@ class _AspirasiState extends State<Aspirasi> {
             const SizedBox(
               height: 32,
             ),
-            const Text(
+            Text(
               'Petunjuk Aspirasi',
-              style: TextStyle(
+              style: GoogleFonts.poppins(
                 color: Colors.black,
                 fontSize: 24,
-                fontFamily: 'Poppins',
                 fontWeight: FontWeight.w500,
                 height: 0,
                 letterSpacing: 0.48,
@@ -42,14 +45,13 @@ class _AspirasiState extends State<Aspirasi> {
             const SizedBox(
               height: 16,
             ),
-            const SizedBox(
+            SizedBox(
               width: 352,
               child: Text(
                 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia.',
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   color: Colors.black,
                   fontSize: 16,
-                  fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
                   height: 0,
                   letterSpacing: 0.32,
@@ -86,10 +88,9 @@ class _AspirasiState extends State<Aspirasi> {
                       children: [
                         Text(
                           '$itemNumber. ',
-                          style: const TextStyle(
+                          style: GoogleFonts.poppins(
                             color: Colors.black,
                             fontSize: 16,
-                            fontFamily: 'Poppins',
                             fontWeight: FontWeight.w500,
                             height: 0,
                             letterSpacing: 0.32,
@@ -98,10 +99,9 @@ class _AspirasiState extends State<Aspirasi> {
                         Expanded(
                           child: Text(
                             itemText,
-                            style: const TextStyle(
+                            style: GoogleFonts.poppins(
                               color: Colors.black,
                               fontSize: 16,
-                              fontFamily: 'Poppins',
                               fontWeight: FontWeight.w400,
                               height: 0,
                               letterSpacing: 0.32,
@@ -115,20 +115,21 @@ class _AspirasiState extends State<Aspirasi> {
               ),
             ),
             const SizedBox(
-              height: 64,
+              height: 250,
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.to(() => const AspirasiPost());
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff3E4095),
                 fixedSize: const Size(353, 60),
               ),
-              child: const Text(
+              child: Text(
                 'Mulai',
-                style: TextStyle(
-                  color: Color(0xFFF9F9F9),
+                style: GoogleFonts.poppins(
+                  color: const Color(0xFFF9F9F9),
                   fontSize: 16,
-                  fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   height: 0,
                   letterSpacing: 0.32,

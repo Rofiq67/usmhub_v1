@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:usmhub_v1/features/aspirasi_page/presentations/widgets/drpdown.dart';
 
 class FormAspirasi1 extends StatefulWidget {
-  const FormAspirasi1({super.key});
+  final TextEditingController controller;
+  final String? selectedKategori;
+  final ValueChanged<String?> onSelectedKategoriChanged;
+
+  const FormAspirasi1({
+    Key? key,
+    required this.controller,
+    this.selectedKategori,
+    required this.onSelectedKategoriChanged,
+  }) : super(key: key);
 
   @override
   State<FormAspirasi1> createState() => _FormAspirasi1State();
 }
 
 class _FormAspirasi1State extends State<FormAspirasi1> {
+  List<String> jenisAspirasi = [
+    'Fasilitas',
+    'Kebijakan',
+    'Pelayanan',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: const Color(0xfff5f5f5),
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 20),
-          child: Icon(Iconsax.arrow_left),
-        ),
-      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -28,26 +36,25 @@ class _FormAspirasi1State extends State<FormAspirasi1> {
             const SizedBox(
               height: 32,
             ),
-            const SizedBox(
+            SizedBox(
               width: 88,
               height: 88,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     '01',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                       color: Colors.black,
                       fontSize: 64,
-                      fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
                       height: 0.01,
                       letterSpacing: 1.28,
                     ),
                   ),
-                  SizedBox(height: 29),
-                  Divider(
+                  const SizedBox(height: 29),
+                  const Divider(
                     height: 20,
                     thickness: 4,
                     indent: 40,
@@ -57,14 +64,13 @@ class _FormAspirasi1State extends State<FormAspirasi1> {
                 ],
               ),
             ),
-            const SizedBox(
+            SizedBox(
               width: 352,
               child: Text(
                 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia.',
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   color: Colors.black,
                   fontSize: 16,
-                  fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
                   height: 0,
                   letterSpacing: 0.32,
@@ -74,60 +80,11 @@ class _FormAspirasi1State extends State<FormAspirasi1> {
             const SizedBox(
               height: 32,
             ),
-            const TextField(
-              decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xff3e4095), width: 2),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(29),
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(width: 2, color: Color(0xff3E4095)),
-                    borderRadius: BorderRadius.all(Radius.circular(29))),
-                filled: true,
-                fillColor: Color(0xfff5f5f5),
-                prefixIconColor: Color(0xff3E4095),
-                prefixIcon: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 10),
-                  child: Icon(
-                    Iconsax.direct_right,
-                  ),
-                ),
-                hintText: 'Judul Aspirasi',
-                hintStyle: TextStyle(
-                  color: Color(0xFF757F90),
-                  fontSize: 16,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  height: 0,
-                  letterSpacing: 0.32,
-                ),
-              ),
-              maxLines: 7,
-              minLines: 1,
-              maxLength: 250,
-            ),
-            const SizedBox(
-              height: 210,
-            ),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xff3E4095),
-                fixedSize: const Size(353, 60),
-              ),
-              child: const Text(
-                'Mulai',
-                style: TextStyle(
-                  color: Color(0xFFF9F9F9),
-                  fontSize: 16,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  height: 0,
-                  letterSpacing: 0.32,
-                ),
-              ),
+            DrpDown(
+              labelDrp: 'Kategori aspirasi',
+              value: widget.selectedKategori,
+              listItem: jenisAspirasi,
+              onChanged: widget.onSelectedKategoriChanged,
             ),
           ],
         ),
