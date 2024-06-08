@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:usmhub_v1/features/aspirasi_page/domains/controllers/aspirasi_controller.dart';
 import 'package:usmhub_v1/features/chat_page/presentations/pages/chat_page.dart';
 import 'package:usmhub_v1/features/home_page/presentations/pages/homepage.dart';
 import 'package:usmhub_v1/features/notification_page/presentations/pages/notif_page.dart';
-import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/form_pengaduan4.dart';
-import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/pengaduan.dart';
+import 'package:usmhub_v1/features/pengaduan_page/domains/controllers/pengaduan_controller.dart';
+import 'package:usmhub_v1/features/progress_page/domains/controllers/progress_controller.dart';
 import 'package:usmhub_v1/features/progress_page/presentations/pages/progress_page.dart';
 import 'package:usmhub_v1/features/registration_page/presentations/pages/login_page.dart';
 import 'package:usmhub_v1/features/settings_page/presentations/pages/settings_page.dart';
-// import 'package:usmhub_v1/admin/features/dashboard-admin/dashboard_admin.dart';
-// import 'package:usmhub_v1/admin/features/desktop_scaffold.dart';
-// import 'package:usmhub_v1/admin/features/mobile_scaffold.dart';
-// import 'package:usmhub_v1/admin/features/responsive_layout.dart';
-// import 'package:usmhub_v1/admin/features/tablet_scaffold.dart';
-// import 'package:usmhub_v1/users/features/home_page/presentations/pages/homepage.dart';
 
 void main() {
-  runApp(const MyApp());
+  initializeDateFormatting('id_ID', null).then((_) {
+    Get.put(PengaduanController());
+    Get.put(AspirasiController());
+    // Get.put(ProgressController());
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -47,12 +47,12 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _pages = <Widget>[
-    HomePage(),
-    ChatPage(),
-    NotifPage(),
+  static final List<Widget> _pages = <Widget>[
+    const HomePage(),
+    const ChatPage(),
     ProgressPage(),
-    SettingsPage(),
+    const NotifPage(),
+    const SettingsPage(),
   ];
 
   void _onItemTapped(int index) {

@@ -1,9 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:usmhub_v1/features/registration_page/domains/controllers/auth.dart';
@@ -33,8 +31,9 @@ class _SignupPageState extends State<SignupPage> {
   String? _selectedProgdi;
   String? _selectedGender;
 
+  String? imgProfil;
+
   // Fungsi untuk menampilkan date picker
-  // ignore: unused_element
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -104,7 +103,7 @@ class _SignupPageState extends State<SignupPage> {
             Form(
               child: Column(
                 children: [
-                  //name
+                  // First and last name fields
                   Row(
                     children: [
                       Expanded(
@@ -154,7 +153,7 @@ class _SignupPageState extends State<SignupPage> {
                   InputWidget(
                     hintTxt: 'Password',
                     controller: _passwordController,
-                    obsureTxt: false,
+                    obsureTxt: true,
                     prefixIcon: Iconsax.password_check,
                     suffixIcon: Iconsax.eye_slash,
                   ),
@@ -164,6 +163,8 @@ class _SignupPageState extends State<SignupPage> {
                     controller: _tgl_lahirController,
                     obsureTxt: false,
                     prefixIcon: Iconsax.calendar,
+                    onTap: () => _selectDate(context),
+                    read: true,
                   ),
                   const SizedBox(
                     height: 8,
@@ -196,7 +197,6 @@ class _SignupPageState extends State<SignupPage> {
                   const SizedBox(
                     height: 8,
                   ),
-
                   const SizedBox(
                     height: 4,
                   ),
@@ -209,8 +209,9 @@ class _SignupPageState extends State<SignupPage> {
                         email: _emailController.text.trim(),
                         password: _passwordController.text.trim(),
                         tgl_lahir: _selectedDate,
-                        progdi: _progdiController.text.trim(),
-                        gender: _genderController.text.trim(),
+                        progdi: _selectedProgdi ?? '',
+                        gender: _selectedGender ?? '',
+                        img_profil: imgProfil,
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -219,7 +220,7 @@ class _SignupPageState extends State<SignupPage> {
                         width: 2,
                       ),
                       backgroundColor: const Color(0xff3E4095),
-                      fixedSize: ui.Size(MediaQuery.of(context).size.width, 60),
+                      fixedSize: Size(MediaQuery.of(context).size.width, 60),
                     ),
                     child: Obx(() {
                       return _authController.isLoading.value
@@ -229,7 +230,7 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                             )
                           : Text(
-                              'Masuk',
+                              'Daftar',
                               style: GoogleFonts.poppins(
                                 color: Colors.white,
                                 fontSize: 16,
@@ -246,7 +247,7 @@ class _SignupPageState extends State<SignupPage> {
                     },
                     child: Container(
                       padding: const EdgeInsets.only(top: 8),
-                      alignment: Alignment.center, // memastikan teks rata kiri
+                      alignment: Alignment.center,
                       child: Text.rich(
                         TextSpan(
                           children: [

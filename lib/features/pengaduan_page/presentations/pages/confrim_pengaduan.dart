@@ -16,7 +16,7 @@ class ConfirmPengaduan extends StatelessWidget {
   final VoidCallback onSubmit;
 
   const ConfirmPengaduan({
-    Key? key,
+    super.key,
     this.kategoriPengaduan,
     this.programStudi,
     this.keterangan,
@@ -24,7 +24,7 @@ class ConfirmPengaduan extends StatelessWidget {
     this.buktiPhoto,
     required this.onPrevious,
     required this.onSubmit,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +168,7 @@ class ConfirmPengaduan extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          rating.toString() ?? '0',
+                          rating.toString(),
                           style: GoogleFonts.poppins(
                             color: Colors.black,
                             fontSize: 16,
@@ -242,12 +242,12 @@ class ConfirmPengaduan extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: onPrevious,
-                    child: Text('Sebelumnya'),
+                    child: const Text('Sebelumnya'),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: onSubmit,
-                    child: Text('Kirim Pengaduan'),
+                    child: const Text('Kirim Pengaduan'),
                   ),
                 ],
               ),

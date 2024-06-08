@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:usmhub_v1/features/chat_page/presentations/widgets/card_user_chat.dart';
-import 'package:usmhub_v1/features/notification_page/presentations/widgets/notif_container.dart';
 // import 'package:iconsax/iconsax.dart';
 
 class ChatPage extends StatefulWidget {
@@ -30,7 +29,7 @@ class _ChatPageState extends State<ChatPage> {
                 Text(
                   'Pesan',
                   style: GoogleFonts.poppins(
-                    color: Color(0xFF1C1C1C),
+                    color: const Color(0xFF1C1C1C),
                     fontSize: 24,
                     fontWeight: FontWeight.w500,
                     height: 0,

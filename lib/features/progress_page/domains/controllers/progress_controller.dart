@@ -3,44 +3,56 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:usmhub_v1/constants/constans.dart';
+import 'package:usmhub_v1/features/pengaduan_page/data/models/aduan_models.dart';
 import 'package:usmhub_v1/features/aspirasi_page/data/models/aspirasi_models.dart';
-import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/history_aspirasi.dart';
 
-class AspirasiController extends GetxController {
+class ProgressController extends GetxController {
   final isLoading = false.obs;
   final token = ''.obs;
   final box = GetStorage();
 
-  var selectedJenisAspirasi = ''.obs;
-  var selectedProgramStudi = ''.obs;
-  var rating = 0.obs;
+  var riwayatAduan = <Aduan>[].obs;
   var riwayatAspirasi = <Aspirasi>[].obs;
 
-  Future<void> createAspirasi(Aspirasi aspirasi) async {
+  @override
+  void onInit() {
+    super.onInit();
+    fetchRiwayat();
+  }
+
+  Future<void> fetchRiwayat() async {
+    await fetchRiwayatAduan();
+    await fetchRiwayatAspirasi();
+  }
+
+  Future<void> fetchRiwayatAduan() async {
     try {
       isLoading.value = true;
-      var request = http.MultipartRequest('POST', Uri.parse('$url/aspirasi'));
-      request.headers['Authorization'] = 'Bearer ${box.read('token')}';
-      request.fields.addAll(aspirasi
-          .toJson()
-          .map((key, value) => MapEntry(key, value.toString())));
+      var token = box.read('token');
+      if (token != null) {
+        var response = await http.get(
+          Uri.parse('$url/listaduan'),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json',
+          },
+        );
 
-      var response = await request.send();
-      // ignore: unused_local_variable
-      var responseData = await http.Response.fromStream(response);
-
-      isLoading.value = false;
-      if (response.statusCode == 201) {
-        Get.snackbar('Success', 'Aspirasi berhasil dibuat');
-        await fetchRiwayatAspirasi();
-        Get.to(() => HistoryAspirasi());
+        if (response.statusCode == 200) {
+          var data = jsonDecode(response.body) as List;
+          riwayatAduan.value = data.map((e) => Aduan.fromJson(e)).toList();
+        } else {
+          Get.snackbar('Error', 'Gagal mengambil data riwayat pengaduan');
+        }
       } else {
-        Get.snackbar('Error', 'Terjadi kesalahan saat membuat aspirasi');
+        Get.snackbar('Error', 'Token tidak tersedia');
       }
     } catch (e) {
-      isLoading.value = false;
       print(e);
-      Get.snackbar('Error', 'Terjadi kesalahan saat membuat aspirasi');
+      Get.snackbar(
+          'Error', 'Terjadi kesalahan saat mengambil data riwayat pengaduan');
+    } finally {
+      isLoading.value = false;
     }
   }
 

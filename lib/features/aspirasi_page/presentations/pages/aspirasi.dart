@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/aspirasi_post.dart';
-import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/post_aspirasi.dart';
+import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/form_aspirasi.dart';
 
 class AspirasiPage extends StatefulWidget {
   const AspirasiPage({super.key});
@@ -19,9 +18,14 @@ class _AspirasiPageState extends State<AspirasiPage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: const Color(0xfff5f5f5),
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 20),
-          child: Icon(Iconsax.arrow_left),
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Padding(
+            padding: EdgeInsets.only(left: 20),
+            child: Icon(Iconsax.arrow_left),
+          ),
         ),
       ),
       body: Padding(
@@ -119,7 +123,7 @@ class _AspirasiPageState extends State<AspirasiPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                Get.to(() => const AspirasiPost());
+                Get.to(() => FormAspirasi());
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff3E4095),

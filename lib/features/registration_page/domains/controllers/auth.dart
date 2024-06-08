@@ -9,16 +9,19 @@ import 'package:usmhub_v1/constants/constans.dart';
 import 'package:http/http.dart' as http;
 // import 'package:usmhub_v1/features/home_page/presentations/pages/homepage.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/aspirasi.dart';
-import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/pengaduan.dart';
-import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/post_pengaduan.dart';
 import 'package:usmhub_v1/main.dart';
 
 class AuthController extends GetxController {
   final isLoading = false.obs;
   final token = ''.obs;
-
   final box = GetStorage();
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Initialize token from GetStorage if available
+    token.value = box.read('token') ?? '';
+  }
 
   Future register({
     required String first_name,
@@ -35,7 +38,6 @@ class AuthController extends GetxController {
       isLoading.value = true;
 
       String formattedDate = tgl_lahir.toIso8601String();
-      img_profil ??= null;
 
       var data = {
         'first_name': first_name,
@@ -43,11 +45,13 @@ class AuthController extends GetxController {
         'username': username,
         'email': email,
         'password': password,
-        'img_profil': img_profil,
         'tgl_lahir': formattedDate,
         'progdi': progdi,
         'gender': gender,
       };
+      if (img_profil != null) {
+        data['img_profil'] = img_profil;
+      }
 
       var response = await http.post(
         Uri.parse('$url/register'),
@@ -61,10 +65,10 @@ class AuthController extends GetxController {
       isLoading.value = false;
 
       if (response.statusCode == 201) {
-        token.value = json.decode(response.body)['token'];
+        var responseData = json.decode(response.body);
+        token.value = responseData['token'] ?? ''; // Menghindari nilai null
         box.write('token', token.value);
         Get.offAll(() => const MainPage());
-        debugPrint(response.body);
         Get.snackbar(
           'Success',
           'Pendaftaran berhasil',
@@ -73,42 +77,9 @@ class AuthController extends GetxController {
       } else {
         var responseData = json.decode(response.body);
         Get.snackbar(
-            'Error',
-            responseData['message'] ??
-                'Terjadi kesalahan saat melakukan pendaftaran. Silakan coba lagi.',
-            snackPosition: SnackPosition.TOP,
-            margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-            messageText: Text(
-              'Pastikan data telah terisi semua',
-              style: GoogleFonts.poppins(
-                color: Colors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                height: 0,
-                letterSpacing: 0.32,
-              ),
-            ),
-            titleText: Text(
-              'Error',
-              style: GoogleFonts.poppins(
-                color: Colors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                height: 0,
-                letterSpacing: 0.32,
-              ),
-            ),
-            icon: const Icon(
-              Iconsax.warning_2,
-              size: 25,
-            ));
-        debugPrint(response.body);
-      }
-    } catch (e) {
-      isLoading.value = false;
-      print(e);
-      Get.snackbar('Error',
-          'Terjadi kesalahan saat melakukan pendaftaran. Silakan coba lagi.',
+          'Error',
+          responseData['message'] ??
+              'Terjadi kesalahan saat melakukan pendaftaran. Silakan coba lagi.',
           snackPosition: SnackPosition.TOP,
           margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
           messageText: Text(
@@ -134,7 +105,42 @@ class AuthController extends GetxController {
           icon: const Icon(
             Iconsax.warning_2,
             size: 25,
-          ));
+          ),
+        );
+      }
+    } catch (e) {
+      isLoading.value = false;
+      print(e);
+      Get.snackbar(
+        'Error',
+        'Terjadi kesalahan saat melakukan pendaftaran. Silakan coba lagi.',
+        snackPosition: SnackPosition.TOP,
+        margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+        messageText: Text(
+          'Pastikan data telah terisi semua',
+          style: GoogleFonts.poppins(
+            color: Colors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            height: 0,
+            letterSpacing: 0.32,
+          ),
+        ),
+        titleText: Text(
+          'Error',
+          style: GoogleFonts.poppins(
+            color: Colors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            height: 0,
+            letterSpacing: 0.32,
+          ),
+        ),
+        icon: const Icon(
+          Iconsax.warning_2,
+          size: 25,
+        ),
+      );
     }
   }
 
@@ -159,7 +165,6 @@ class AuthController extends GetxController {
 
       if (response.statusCode == 200) {
         isLoading.value = false;
-        // print(json.decode(response.body),
         token.value = json.decode(response.body)['token'];
         box.write('token', token.value);
         Get.offAll(() => const MainPage());

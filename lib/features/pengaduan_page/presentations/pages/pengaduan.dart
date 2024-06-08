@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/post_pengaduan.dart';
-import 'form_pengaduan1.dart';
-import 'package:usmhub_v1/features/pengaduan_page/data/models/aduan_models.dart';
+import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/form_aduan.dart';
 
 class Pengaduan extends StatefulWidget {
   const Pengaduan({super.key});
@@ -137,16 +135,7 @@ class _PengaduanState extends State<Pengaduan> {
             ),
             ElevatedButton(
               onPressed: () {
-                // // Navigasi langsung ke halaman FormPengaduan1
-                // Get.to(() => FormPengaduan1(
-                //       onSelectCategory: (String selectedCategory) {
-                //         // Anda bisa tambahkan logika terkait pilihan kategori di sini
-                //       },
-                //       onNext: () {
-                //         // Logika jika ingin menambahkan aksi setelah menekan tombol "Selanjutnya"
-                //       },
-                //     ));
-                Get.to(() => const PostPengaduan());
+                Get.to(() => FormAduan());
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff3E4095),

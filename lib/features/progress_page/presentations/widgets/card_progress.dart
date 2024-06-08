@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 // import 'package:flutter/widgets.dart';
 // import 'package:iconsax/iconsax.dart';
 
@@ -22,6 +23,7 @@ class CardProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      margin: const EdgeInsets.only(bottom: 8),
       width: 353,
       height: 88,
       clipBehavior: Clip.antiAlias,
@@ -71,10 +73,9 @@ class CardProgress extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         softWrap: false,
-                        style: const TextStyle(
-                          color: Color(0xFF757F90),
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF757F90),
                           fontSize: 12,
-                          fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
                           height: 0,
                           letterSpacing: 0.24,
@@ -84,10 +85,9 @@ class CardProgress extends StatelessWidget {
                   ),
                   Text(
                     stsCard,
-                    style: const TextStyle(
+                    style: GoogleFonts.poppins(
                       color: Colors.black,
                       fontSize: 16,
-                      fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
                       height: 0,
                       letterSpacing: 0.32,
@@ -95,10 +95,9 @@ class CardProgress extends StatelessWidget {
                   ),
                   Text(
                     dateCard,
-                    style: const TextStyle(
-                      color: Color(0xFF757F90),
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF757F90),
                       fontSize: 12,
-                      fontFamily: 'Poppins',
                       fontWeight: FontWeight.w400,
                       height: 0,
                       letterSpacing: 0.24,
@@ -110,12 +109,11 @@ class CardProgress extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {},
-            child: const Text(
+            child: Text(
               'detail',
-              style: TextStyle(
+              style: GoogleFonts.poppins(
                 color: Colors.black,
                 fontSize: 12,
-                fontFamily: 'Poppins',
                 fontWeight: FontWeight.w400,
                 height: 0,
                 letterSpacing: 0.24,

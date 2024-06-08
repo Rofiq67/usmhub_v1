@@ -10,13 +10,13 @@ class DropdownBtn extends StatelessWidget {
   final IconData prefixIcon;
 
   const DropdownBtn({
-    Key? key,
+    super.key,
     required this.hint,
     required this.value,
     required this.items,
     required this.onChanged,
     required this.prefixIcon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

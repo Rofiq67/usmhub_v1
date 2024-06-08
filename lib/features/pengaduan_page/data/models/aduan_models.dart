@@ -7,6 +7,8 @@ class Aduan {
   final int? rating;
   final String? buktiPhoto;
   final String status;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Aduan({
     required this.id,
@@ -17,31 +19,39 @@ class Aduan {
     this.rating,
     this.buktiPhoto,
     required this.status,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory Aduan.fromJson(Map<String, dynamic> json) {
     return Aduan(
-      id: json['id'],
-      userId: json['user_id'],
-      jenisPengaduan: json['jenis_pengaduan'],
-      programStudi: json['program_studi'],
-      keterangan: json['keterangan'],
-      rating: json['rating'],
-      buktiPhoto: json['bukti_photo'],
-      status: json['status'],
+      id: json['id'] ?? 0,
+      userId: json['user_id'] ?? 0,
+      jenisPengaduan: json['jenis_pengaduan'] ?? '',
+      programStudi: json['program_studi'] ?? '',
+      keterangan: json['keterangan'] ?? '',
+      rating: json['rating'] ?? 0,
+      buktiPhoto: json['bukti_photo'] ?? '',
+      status: json['status'] ?? '',
+      createdAt: DateTime.parse(
+          json['created_at'] ?? DateTime.now().toIso8601String()),
+      updatedAt: DateTime.parse(
+          json['updated_at'] ?? DateTime.now().toIso8601String()),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'userId': userId,
-      'jenisPengaduan': jenisPengaduan,
-      'programStudi': programStudi,
+      'id': id.toString(),
+      'user_id': userId.toString(),
+      'jenis_pengaduan': jenisPengaduan,
+      'program_studi': programStudi,
       'keterangan': keterangan,
-      'rating': rating,
-      'buktiPhoto': buktiPhoto,
+      'rating': rating?.toString() ?? '0',
+      'bukti_photo': buktiPhoto ?? '',
       'status': status,
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
     };
   }
 }

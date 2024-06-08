@@ -29,7 +29,7 @@ class DrpDown extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          value: value,
+          value: value, // Gunakan value langsung
           hint: Text(
             labelDrp,
             style: GoogleFonts.poppins(
