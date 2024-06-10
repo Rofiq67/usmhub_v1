@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/aspirasi.dart';
 import 'package:usmhub_v1/features/home_page/domains/controllers/home_controller.dart';
 import 'package:usmhub_v1/features/home_page/presentations/widgets/banner_widget.dart';
@@ -195,7 +196,8 @@ class _HomePageState extends State<HomePage> {
                   return InfoWidget(
                     labelTxt: feed.kategori,
                     judulTxt: feed.judul,
-                    dateTxt: feed.createdAt.toLocal().toString(),
+                    dateTxt: DateFormat('EEEE, dd MMMM yyyy', 'id_ID')
+                        .format(feed.createdAt),
                     imgInfo: 'assets/images/taman_usm.png',
                   );
                 }).toList(),
