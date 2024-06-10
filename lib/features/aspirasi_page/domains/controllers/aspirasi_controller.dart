@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:usmhub_v1/constants/constans.dart';
 import 'package:usmhub_v1/features/aspirasi_page/data/models/aspirasi_models.dart';
 import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/history_aspirasi.dart';
+import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/sent_aspirasi.dart';
 
 class AspirasiController extends GetxController {
   final isLoading = false.obs;
@@ -33,7 +34,7 @@ class AspirasiController extends GetxController {
       if (response.statusCode == 201) {
         Get.snackbar('Success', 'Aspirasi berhasil dibuat');
         await fetchRiwayatAspirasi();
-        Get.to(() => HistoryAspirasi());
+        Get.to(() => const SentAspirasi());
       } else {
         Get.snackbar('Error', 'Terjadi kesalahan saat membuat aspirasi');
       }

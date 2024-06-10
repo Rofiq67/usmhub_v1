@@ -71,6 +71,7 @@ class HistoryAspirasi extends StatelessWidget {
                       stsCard: Aspirasi.status,
                       dateCard: DateFormat('EEEE, dd MMMM yyyy', 'id_ID')
                           .format(Aspirasi.createdAt),
+                      onPressed: () {},
                     )),
                 const SizedBox(height: 32),
                 const Text(
@@ -93,6 +94,7 @@ class HistoryAspirasi extends StatelessWidget {
                       stsCard: Aspirasi.status,
                       dateCard: DateFormat('EEEE, dd MMMM yyyy', 'id_ID')
                           .format(Aspirasi.createdAt),
+                      onPressed: () {},
                     )),
                 const SizedBox(height: 16),
               ],

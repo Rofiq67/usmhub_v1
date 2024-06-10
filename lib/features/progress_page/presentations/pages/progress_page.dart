@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:usmhub_v1/features/aspirasi_page/data/models/aspirasi_models.dart';
 import 'package:usmhub_v1/features/pengaduan_page/data/models/aduan_models.dart';
 import 'package:usmhub_v1/features/progress_page/domains/controllers/progress_controller.dart';
+import 'package:usmhub_v1/features/progress_page/presentations/pages/detail_progress.dart';
 import 'package:usmhub_v1/features/progress_page/presentations/widgets/card_progress.dart';
 
 class ProgressPage extends StatelessWidget {
@@ -30,18 +32,29 @@ class ProgressPage extends StatelessWidget {
 
         var sedangBerjalan = [
           ...progressController.riwayatAduan.where((aduan) =>
-              (aduan).status == 'Belum Dibaca' ||
+              aduan.status == 'Belum Dibaca' ||
               aduan.status == 'Ditindaklanjuti'),
           ...progressController.riwayatAspirasi
-              .where((aspirasi) => (aspirasi).status == 'Belum Dibaca')
+              .where((aspirasi) => aspirasi.status == 'Belum Dibaca')
         ];
 
         var selesai = [
           ...progressController.riwayatAduan
-              .where((aduan) => (aduan).status == 'Selesai'),
+              .where((aduan) => aduan.status == 'Selesai'),
           ...progressController.riwayatAspirasi
-              .where((aspirasi) => (aspirasi).status == 'Telah diterima')
+              .where((aspirasi) => aspirasi.status == 'Telah diterima')
         ];
+
+        sedangBerjalan.sort((a, b) {
+          var aDate = a is Aduan ? a.updatedAt : (a as Aspirasi).updatedAt;
+          var bDate = b is Aduan ? b.updatedAt : (b as Aspirasi).updatedAt;
+          return bDate.compareTo(aDate);
+        });
+        selesai.sort((a, b) {
+          var aDate = a is Aduan ? a.updatedAt : (a as Aspirasi).updatedAt;
+          var bDate = b is Aduan ? b.updatedAt : (b as Aspirasi).updatedAt;
+          return bDate.compareTo(aDate);
+        });
 
         return RefreshIndicator(
           onRefresh: _refreshHistory,
@@ -50,24 +63,22 @@ class ProgressPage extends StatelessWidget {
             child: ListView(
               children: [
                 const SizedBox(height: 64),
-                const Text(
+                Text(
                   'Progress',
-                  style: TextStyle(
-                    color: Color(0xFF1C1C1C),
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF1C1C1C),
                     fontSize: 24,
-                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w500,
                     height: 0,
                     letterSpacing: 0.48,
                   ),
                 ),
                 const SizedBox(height: 32),
-                const Text(
+                Text(
                   'Sedang Berjalan',
-                  style: TextStyle(
-                    color: Color(0xFF1C1C1C),
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF1C1C1C),
                     fontSize: 24,
-                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w500,
                     height: 0,
                     letterSpacing: 0.48,
@@ -96,15 +107,17 @@ class ProgressPage extends StatelessWidget {
                     stsCard: status,
                     dateCard: DateFormat('EEEE, dd MMMM yyyy', 'id_ID')
                         .format(createdAt),
+                    onPressed: () {
+                      Get.to(() => DetailProgress(item: item));
+                    },
                   );
                 }),
                 const SizedBox(height: 32),
-                const Text(
+                Text(
                   'Selesai',
-                  style: TextStyle(
-                    color: Color(0xFF1C1C1C),
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF1C1C1C),
                     fontSize: 24,
-                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w500,
                     height: 0,
                     letterSpacing: 0.48,
@@ -133,6 +146,9 @@ class ProgressPage extends StatelessWidget {
                     stsCard: status,
                     dateCard: DateFormat('EEEE, dd MMMM yyyy', 'id_ID')
                         .format(createdAt),
+                    onPressed: () {
+                      Get.to(() => DetailProgress(item: item));
+                    },
                   );
                 }),
                 const SizedBox(height: 16),

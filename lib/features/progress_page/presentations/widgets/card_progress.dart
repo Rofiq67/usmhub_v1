@@ -10,117 +10,123 @@ class CardProgress extends StatelessWidget {
   final String jdlCard;
   final String stsCard;
   final String dateCard;
-  const CardProgress(
-      {required this.iconCard,
-      required this.colorIconCard,
-      required this.bgIconCard,
-      required this.jdlCard,
-      required this.stsCard,
-      required this.dateCard,
-      super.key});
+  final VoidCallback onPressed;
+  const CardProgress({
+    required this.iconCard,
+    required this.colorIconCard,
+    required this.bgIconCard,
+    required this.jdlCard,
+    required this.stsCard,
+    required this.dateCard,
+    required this.onPressed,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      margin: const EdgeInsets.only(bottom: 8),
-      width: 353,
-      height: 88,
-      clipBehavior: Clip.antiAlias,
-      decoration: ShapeDecoration(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        margin: const EdgeInsets.only(bottom: 8),
+        width: 353,
+        height: 88,
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
         ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 39,
-                height: 39,
-                decoration: ShapeDecoration(
-                  // color: const Color(0xFFBCBEF3),
-                  color: bgIconCard,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 39,
+                  height: 39,
+                  decoration: ShapeDecoration(
+                    // color: const Color(0xFFBCBEF3),
+                    color: bgIconCard,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      // Iconsax.volume_low_15,
+                      iconCard,
+                      // color: const Color(0xff3E4095),
+                      color: colorIconCard,
+                    ),
                   ),
                 ),
-                child: Center(
-                  child: Icon(
-                    // Iconsax.volume_low_15,
-                    iconCard,
-                    // color: const Color(0xff3E4095),
-                    color: colorIconCard,
-                  ),
+                const SizedBox(
+                  width: 16,
                 ),
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Flexible(
-                    child: Container(
-                      width: 184,
-                      padding: const EdgeInsets.only(right: 1),
-                      child: Text(
-                        jdlCard,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        softWrap: false,
-                        style: GoogleFonts.poppins(
-                          color: const Color(0xFF757F90),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                          letterSpacing: 0.24,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      child: Container(
+                        width: 184,
+                        padding: const EdgeInsets.only(right: 1),
+                        child: Text(
+                          jdlCard,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          softWrap: false,
+                          style: GoogleFonts.poppins(
+                            color: const Color(0xFF757F90),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            height: 0,
+                            letterSpacing: 0.24,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Text(
-                    stsCard,
-                    style: GoogleFonts.poppins(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      height: 0,
-                      letterSpacing: 0.32,
+                    Text(
+                      stsCard,
+                      style: GoogleFonts.poppins(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        height: 0,
+                        letterSpacing: 0.32,
+                      ),
                     ),
-                  ),
-                  Text(
-                    dateCard,
-                    style: GoogleFonts.poppins(
-                      color: const Color(0xFF757F90),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                      letterSpacing: 0.24,
+                    Text(
+                      dateCard,
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFF757F90),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                        letterSpacing: 0.24,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          TextButton(
-            onPressed: () {},
-            child: Text(
-              'detail',
-              style: GoogleFonts.poppins(
-                color: Colors.black,
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                height: 0,
-                letterSpacing: 0.24,
-              ),
+                  ],
+                ),
+              ],
             ),
-          )
-        ],
+            TextButton(
+              onPressed: () {},
+              child: Text(
+                'detail',
+                style: GoogleFonts.poppins(
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  height: 0,
+                  letterSpacing: 0.24,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -74,6 +74,7 @@ class RiwayatAduan extends StatelessWidget {
                       stsCard: aduan.status,
                       dateCard: DateFormat('EEEE, dd MMMM yyyy', 'id_ID')
                           .format(aduan.createdAt),
+                      onPressed: () {},
                     )),
                 const SizedBox(height: 32),
                 const Text(
@@ -96,6 +97,7 @@ class RiwayatAduan extends StatelessWidget {
                       stsCard: aduan.status,
                       dateCard: DateFormat('EEEE, dd MMMM yyyy', 'id_ID')
                           .format(aduan.createdAt),
+                      onPressed: () {},
                     )),
                 const SizedBox(height: 16),
               ],

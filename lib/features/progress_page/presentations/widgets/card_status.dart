@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CardStatus extends StatelessWidget {
   final String judulSts;
   final String isiSts;
-  final String dateSts;
+  final IconData icon;
+  final Color iconColor;
+  final Color bgIcon;
   const CardStatus(
       {required this.judulSts,
       required this.isiSts,
-      required this.dateSts,
-      super.key});
+      super.key,
+      required this.icon,
+      required this.iconColor,
+      required this.bgIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +27,17 @@ class CardStatus extends StatelessWidget {
             width: 39,
             height: 39,
             decoration: ShapeDecoration(
-              color: const Color(0xFFBCBEF3),
-              // color: bgIconCard,
+              // color: const Color(0xFFBCBEF3),
+              color: bgIcon,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
-            child: const Icon(
-              Iconsax.direct_right,
+            child: Icon(
+              icon,
               // iconCard,
-              color: Color(0xff3E4095),
-              // color: colorIconCard,
+              // color: Color(0xff3E4095),
+              color: iconColor,
             ),
           ),
           const SizedBox(
@@ -46,10 +50,9 @@ class CardStatus extends StatelessWidget {
               Text(
                 // 'Pengaduan ditindaklanjuti',
                 judulSts,
-                style: const TextStyle(
+                style: GoogleFonts.poppins(
                   color: Colors.black,
                   fontSize: 14,
-                  fontFamily: 'Poppins',
                   fontWeight: FontWeight.w500,
                   height: 0,
                   letterSpacing: 0.28,
@@ -62,10 +65,9 @@ class CardStatus extends StatelessWidget {
                   isiSts,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
-                  style: const TextStyle(
-                    color: Color(0xFF757F90),
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF757F90),
                     fontSize: 12,
-                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w400,
                     height: 0,
                     letterSpacing: 0.24,
@@ -74,20 +76,6 @@ class CardStatus extends StatelessWidget {
               ),
               // SizedBox(height: 16),
             ],
-          ),
-          const SizedBox(
-            width: 16,
-          ),
-          Text(
-            dateSts,
-            style: const TextStyle(
-              color: Color(0xFF757F90),
-              fontSize: 10,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
-              height: 0,
-              letterSpacing: 0.20,
-            ),
           ),
         ],
       ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/aspirasi.dart';
+import 'package:usmhub_v1/features/home_page/domains/controllers/home_controller.dart';
 import 'package:usmhub_v1/features/home_page/presentations/widgets/banner_widget.dart';
 import 'package:usmhub_v1/features/home_page/presentations/widgets/info_widget.dart';
 import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/pengaduan.dart';
@@ -14,6 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final HomeController homeController = Get.put(HomeController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,13 +29,12 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Halo, Rofiq',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                     color: Colors.black,
                     fontSize: 18,
-                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w400,
                     height: 0,
                     letterSpacing: 0.32,
@@ -104,12 +106,11 @@ class _HomePageState extends State<HomePage> {
                             color: Color(0xff3E4095),
                           ),
                         ),
-                        const Text(
+                        Text(
                           'Pengaduan',
-                          style: TextStyle(
+                          style: GoogleFonts.poppins(
                             color: Colors.black,
                             fontSize: 14,
-                            fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
                             height: 0,
                             letterSpacing: 0.28,
@@ -150,12 +151,11 @@ class _HomePageState extends State<HomePage> {
                             color: Color(0xffFFB800),
                           ),
                         ),
-                        const Text(
+                        Text(
                           'Aspirasi',
-                          style: TextStyle(
+                          style: GoogleFonts.poppins(
                             color: Colors.black,
                             fontSize: 14,
-                            fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
                             height: 0,
                             letterSpacing: 0.28,
@@ -170,12 +170,11 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 32,
             ),
-            const Text(
+            Text(
               'Informasi',
-              style: TextStyle(
+              style: GoogleFonts.poppins(
                 color: Color(0xFF1C1C1C),
                 fontSize: 24,
-                fontFamily: 'Poppins',
                 fontWeight: FontWeight.w500,
                 height: 0,
                 letterSpacing: 0.48,
@@ -184,21 +183,24 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 16,
             ),
-            const InfoWidget(
-                labelTxt: 'Aspirasi',
-                judulTxt: 'Taman Inspiratif: Semangat Berkarya Mahasiswa',
-                dateTxt: '5 Maret 2024',
-                imgInfo: 'assets/images/taman_usm.png'),
-            const InfoWidget(
-                labelTxt: 'Pengaduan',
-                judulTxt: 'Update Lahan Parkir',
-                dateTxt: '28 Februari 2024',
-                imgInfo: 'assets/images/parkir_usm.png'),
-            const InfoWidget(
-                labelTxt: 'Aspirasi',
-                judulTxt: 'Dialog Mahasiswa',
-                dateTxt: '5 Februari 2024',
-                imgInfo: 'assets/images/dm_mahasiswa.png')
+            Obx(() {
+              if (homeController.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (homeController.feeds.isEmpty) {
+                return const Center(child: Text('No feeds available'));
+              }
+              return Column(
+                children: homeController.feeds.map((feed) {
+                  return InfoWidget(
+                    labelTxt: feed.kategori,
+                    judulTxt: feed.judul,
+                    dateTxt: feed.createdAt.toLocal().toString(),
+                    imgInfo: 'assets/images/taman_usm.png',
+                  );
+                }).toList(),
+              );
+            }),
           ],
         ),
       ),

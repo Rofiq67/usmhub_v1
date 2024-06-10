@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:usmhub_v1/constants/constans.dart';
 import 'package:usmhub_v1/features/pengaduan_page/data/models/aduan_models.dart';
 import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/riwayat_aduan.dart';
+import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/sent_pengaduan.dart';
 
 class PengaduanController extends GetxController {
   final isLoading = false.obs;
@@ -38,9 +39,14 @@ class PengaduanController extends GetxController {
       request.headers['Authorization'] = 'Bearer ${box.read('token')}';
       request.fields.addAll(
           aduan.toJson().map((key, value) => MapEntry(key, value.toString())));
+
+      // Periksa jika buktiPhoto tidak null
       if (buktiPhoto.value != null) {
         request.files.add(await http.MultipartFile.fromPath(
             'bukti_photo', buktiPhoto.value!.path));
+      } else {
+        // Jika tidak ada foto yang diunggah, kirim nilai null atau string kosong ke backend
+        request.fields['bukti_photo'] = ''; // atau null
       }
 
       var response = await request.send();
@@ -49,9 +55,12 @@ class PengaduanController extends GetxController {
 
       isLoading.value = false;
       if (response.statusCode == 201) {
-        Get.snackbar('Success', 'Pengaduan berhasil dibuat');
+        Get.snackbar(
+          'Success',
+          'Pengaduan berhasil dibuat',
+        );
         await fetchRiwayatAduan();
-        Get.to(() => RiwayatAduan());
+        Get.to(() => const SentPengaduan());
       } else {
         Get.snackbar('Error', 'Terjadi kesalahan saat membuat pengaduan');
       }
