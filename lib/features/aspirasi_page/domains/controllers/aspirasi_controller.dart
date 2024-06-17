@@ -1,10 +1,11 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:usmhub_v1/constants/constans.dart';
 import 'package:usmhub_v1/features/aspirasi_page/data/models/aspirasi_models.dart';
-import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/history_aspirasi.dart';
 import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/sent_aspirasi.dart';
 
 class AspirasiController extends GetxController {

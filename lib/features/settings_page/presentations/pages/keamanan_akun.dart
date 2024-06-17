@@ -1,131 +1,161 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:usmhub_v1/features/settings_page/domains/controllers/settings_controller.dart';
+import 'package:usmhub_v1/features/settings_page/presentations/widgets/input_widget.dart';
 
 class KemananAkun extends StatefulWidget {
-  const KemananAkun({super.key});
+  const KemananAkun({Key? key}) : super(key: key);
 
   @override
   State<KemananAkun> createState() => _KemananAkunState();
 }
 
 class _KemananAkunState extends State<KemananAkun> {
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  final SettingsController _settingsController = SettingsController();
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  bool _passwordVisible = false;
+  bool _confirmPasswordVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 20),
-          child: Icon(Iconsax.arrow_left),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: const Icon(Iconsax.arrow_left),
+          ),
         ),
         centerTitle: true,
         backgroundColor: const Color(0xffF5F5F5),
-        title: const Text(
-          'Kemanan Akun',
+        title: Text(
+          'Keamanan Akun',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Color(0xFF1C1C1C),
+          style: GoogleFonts.poppins(
+            color: const Color(0xFF1C1C1C),
             fontSize: 16,
-            fontFamily: 'Poppins',
             fontWeight: FontWeight.w600,
             height: 0,
             letterSpacing: 0.32,
           ),
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-              height: 32,
-            ),
-            const Text(
+            const SizedBox(height: 32),
+            Text(
               'Ganti Kata Sandi',
-              style: TextStyle(
+              style: GoogleFonts.poppins(
                 color: Colors.black,
                 fontSize: 24,
-                fontFamily: 'Poppins',
                 fontWeight: FontWeight.w500,
                 height: 0,
                 letterSpacing: 0.48,
               ),
             ),
-            const SizedBox(
-              height: 4,
-            ),
-            const SizedBox(
-              width: 352,
-              child: Text(
-                'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia.',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  height: 0,
-                  letterSpacing: 0.32,
-                ),
+            const SizedBox(height: 4),
+            Text(
+              'Masukkan NIM dan Kata Sandi Baru untuk memperbarui password',
+              style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                height: 0,
+                letterSpacing: 0.32,
               ),
             ),
-            const SizedBox(
-              height: 64,
-            ),
+            const SizedBox(height: 32),
             Form(
               child: Column(
                 children: [
-                  TextFormField(
-                    style: const TextStyle(
-                      color: Color(0xff3E4095),
-                      fontSize: 16,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                      letterSpacing: 0.32,
-                    ),
-                    decoration: const InputDecoration(
-                      // isDense: true,
-                      prefixIconColor: Color(0xff3E4095),
-                      prefixIcon: Padding(
-                        padding: EdgeInsets.only(left: 20, right: 10),
-                        child: Icon(
-                          Iconsax.direct,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(width: 2, color: Color(0xff3E4095)),
-                          borderRadius: BorderRadius.all(Radius.circular(29))),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(width: 2, color: Color(0xff3E4095)),
-                          borderRadius: BorderRadius.all(Radius.circular(29))),
-                      hintText: 'E-mail',
-                      hintStyle: TextStyle(
-                        color: Color(0xFF757F90),
-                        fontSize: 16,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                        letterSpacing: 0.32,
-                      ),
-                    ),
+                  InputWidget(
+                    hintTxt: 'Kata Sandi Baru',
+                    controller: _passwordController,
+                    obscureTxt: !_passwordVisible,
+                    prefixIcon: Iconsax.lock,
+                    suffixIcon:
+                        _passwordVisible ? Iconsax.eye : Iconsax.eye_slash,
+                    onTapSuffix: () {
+                      setState(() {
+                        _passwordVisible = !_passwordVisible;
+                      });
+                    },
                   ),
-                  const SizedBox(
-                    height: 16,
+                  const SizedBox(height: 16),
+                  InputWidget(
+                    hintTxt: 'Konfirmasi Kata Sandi Baru',
+                    controller: _confirmPasswordController,
+                    obscureTxt: !_confirmPasswordVisible,
+                    prefixIcon: Iconsax.lock,
+                    suffixIcon: _confirmPasswordVisible
+                        ? Iconsax.eye
+                        : Iconsax.eye_slash,
+                    onTapSuffix: () {
+                      setState(() {
+                        _confirmPasswordVisible = !_confirmPasswordVisible;
+                      });
+                    },
                   ),
+                  const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      String password = _passwordController.text.trim();
+                      String confirmPassword =
+                          _confirmPasswordController.text.trim();
+
+                      if (password.isNotEmpty && confirmPassword.isNotEmpty) {
+                        if (password == confirmPassword) {
+                          _settingsController
+                              .updatePassword(password, confirmPassword)
+                              .then((_) {
+                            _passwordController.clear();
+                            _confirmPasswordController.clear();
+                          }).catchError((error) {
+                            Get.snackbar(
+                              'Error',
+                              'Failed to update password: $error',
+                            );
+                          });
+                        } else {
+                          Get.snackbar(
+                            'Error',
+                            'Password fields do not match',
+                          );
+                        }
+                      } else {
+                        Get.snackbar(
+                          'Error',
+                          'Please fill in all fields',
+                        );
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff3E4095),
                       fixedSize: const Size(353, 60),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Kirim',
-                      style: TextStyle(
-                        color: Color(0xFFF9F9F9),
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFFF9F9F9),
                         fontSize: 16,
-                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
                         height: 0,
                         letterSpacing: 0.32,

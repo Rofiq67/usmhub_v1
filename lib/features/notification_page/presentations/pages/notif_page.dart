@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:usmhub_v1/features/notification_page/presentations/widgets/notif_container.dart';
 // import 'package:iconsax/iconsax.dart';
 
@@ -24,12 +26,11 @@ class _NotifPageState extends State<NotifPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Notifikasi',
-                  style: TextStyle(
-                    color: Color(0xFF1C1C1C),
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF1C1C1C),
                     fontSize: 24,
-                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w500,
                     height: 0,
                     letterSpacing: 0.48,
@@ -37,12 +38,11 @@ class _NotifPageState extends State<NotifPage> {
                 ),
                 TextButton(
                   onPressed: () {},
-                  child: const Text(
+                  child: Text(
                     'Baca semua',
-                    style: TextStyle(
-                      color: Color(0xFF757F90),
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF757F90),
                       fontSize: 12,
-                      fontFamily: 'Poppins',
                       fontWeight: FontWeight.w400,
                       height: 0,
                       letterSpacing: 0.24,
@@ -56,13 +56,29 @@ class _NotifPageState extends State<NotifPage> {
             height: 32,
           ),
           const NotifContainer(
-              judulNotif: 'Lahan Sempit',
-              statusNotif: 'Pengaduan Berhasil Dikirim',
-              waktuNotif: '5 Maret 2024'),
+            judulNotif: 'Aspirasi',
+            statusNotif: 'Aspirasi berhasil diverifikasi',
+            waktuNotif: '5 Maret 2024',
+            iconNtf: Iconsax.lamp_on5,
+            clrIcon: Color(0xffFFB800),
+            bgColor: Color(0xFFFEFBB9),
+          ),
           const NotifContainer(
-              judulNotif: 'Tidak ada tempat tugas',
-              statusNotif: 'Verifikasi Pengaduan',
-              waktuNotif: '1 Maret 2024')
+            judulNotif: 'Pengaduan',
+            statusNotif: 'Pengaduan telah selesai',
+            waktuNotif: '1 Maret 2024',
+            iconNtf: Iconsax.microphone,
+            clrIcon: Color(0xff3E4095),
+            bgColor: Color(0xFFBCBEF3),
+          ),
+          const NotifContainer(
+            judulNotif: 'Pengaduan pelayanan',
+            statusNotif: 'Anda menerima komentar pada aduan',
+            waktuNotif: '1 Maret 2024',
+            iconNtf: Iconsax.message,
+            clrIcon: Color(0xff3E4095),
+            bgColor: Color(0xFFBCBEF3),
+          ),
         ],
       ),
     );

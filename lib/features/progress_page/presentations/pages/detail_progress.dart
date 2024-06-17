@@ -5,9 +5,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:usmhub_v1/features/aspirasi_page/data/models/aspirasi_models.dart';
 import 'package:usmhub_v1/features/pengaduan_page/data/models/aduan_models.dart';
-import 'package:usmhub_v1/features/progress_page/presentations/pages/room_chat.dart';
+import 'package:usmhub_v1/features/progress_page/presentations/pages/komentar_page.dart';
 import 'package:usmhub_v1/features/progress_page/presentations/widgets/card_status.dart';
-import 'package:usmhub_v1/features/progress_page/presentations/widgets/modal_progress.dart';
 
 class DetailProgress extends StatefulWidget {
   final dynamic item;
@@ -80,7 +79,7 @@ class _DetailProgressState extends State<DetailProgress> {
         CardStatus(
           judulSts: 'Pengaduan ditindaklanjuti',
           isiSts:
-              'Laporan pengaduan sedang ditindaklanjuti. Jika ada pertanyaan, silahkan kirim pesan.',
+              'Laporan ditindaklanjuti. Jika ada pertanyaan? buka komentar.',
           icon: Iconsax.direct_right,
           iconColor: iconColor,
           bgIcon: bgColor,
@@ -105,14 +104,26 @@ class _DetailProgressState extends State<DetailProgress> {
               ? 'Menunggu Verifikasi Pengaduan'
               : 'Menunggu Verifikasi Aspirasi',
           isiSts: widget.item is Aduan
-              ? 'Laporan pengaduan memasuki tahap pengecekan, dan akan diteruskan untuk ditindaklanjuti'
-              : 'Laporan aspirasi memasuki tahap pengecekan, dan akan diteruskan untuk ditindaklanjuti',
+              ? 'Laporan sedang diverifikasi dan akan segera diproses.'
+              : 'Laporan sedang diverifikasi dan akan segera diproses.',
           icon: Iconsax.clock,
           iconColor: iconColor,
           bgIcon: bgColor,
         ),
       );
     }
+
+    //
+    late int aduanId = 0; // Default value
+
+    @override
+    void initState() {
+      super.initState();
+      if (widget.item != null && widget.item is Aduan) {
+        aduanId = widget.item.id;
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -176,7 +187,7 @@ class _DetailProgressState extends State<DetailProgress> {
                                           ? 'Kategori aduan'
                                           : 'Kategori aspirasi',
                                       style: GoogleFonts.poppins(
-                                        color: Color(0xFF757F90),
+                                        color: const Color(0xFF757F90),
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
                                         letterSpacing: 0.32,
@@ -201,7 +212,7 @@ class _DetailProgressState extends State<DetailProgress> {
                                     Text(
                                       'Tujuan Wewenang',
                                       style: GoogleFonts.poppins(
-                                        color: Color(0xFF757F90),
+                                        color: const Color(0xFF757F90),
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                         letterSpacing: 0.32,
@@ -225,7 +236,7 @@ class _DetailProgressState extends State<DetailProgress> {
                                     Text(
                                       'Keterangan',
                                       style: GoogleFonts.poppins(
-                                        color: Color(0xFF757F90),
+                                        color: const Color(0xFF757F90),
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
                                         letterSpacing: 0.32,
@@ -238,7 +249,7 @@ class _DetailProgressState extends State<DetailProgress> {
                                         child: Text(
                                           widget.item.keterangan,
                                           style: GoogleFonts.poppins(
-                                            color: Color(0xFF1C1C1C),
+                                            color: const Color(0xFF1C1C1C),
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
                                             letterSpacing: 0.32,
@@ -256,7 +267,7 @@ class _DetailProgressState extends State<DetailProgress> {
                                     Text(
                                       'Rating',
                                       style: GoogleFonts.poppins(
-                                        color: Color(0xFF757F90),
+                                        color: const Color(0xFF757F90),
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
                                         letterSpacing: 0.32,
@@ -288,7 +299,8 @@ class _DetailProgressState extends State<DetailProgress> {
                                               Text(
                                                 'Bukti Photo',
                                                 style: GoogleFonts.poppins(
-                                                  color: Color(0xFF757F90),
+                                                  color:
+                                                      const Color(0xFF757F90),
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w400,
                                                   letterSpacing: 0.32,
@@ -468,19 +480,35 @@ class _DetailProgressState extends State<DetailProgress> {
                     letterSpacing: 0.48,
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 6),
                 ...cardStatuses,
                 //
               ],
             ),
-            Positioned(
-                right: 20,
-                bottom: 32,
-                child: ElevatedButton(
-                    onPressed: () {
-                      Get.to(() => const RoomChat());
-                    },
-                    child: Text('Kirim Pesan')))
+            widget.item is Aduan
+                ? Positioned(
+                    right: 20,
+                    bottom: 32,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.to(
+                            () => KomentarPage(aduanId: widget.item?.id ?? 0));
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white),
+                      child: Text(
+                        'Komentar',
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF3E4095),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          height: 0,
+                          letterSpacing: 0.28,
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
           ],
         ),
       ),

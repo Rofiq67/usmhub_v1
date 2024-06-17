@@ -1,23 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 
 class NotifContainer extends StatefulWidget {
   final String judulNotif;
   final String statusNotif;
   final String waktuNotif;
-  const NotifContainer(
-      {required this.judulNotif,
-      required this.statusNotif,
-      required this.waktuNotif,
-      super.key});
+  final IconData iconNtf;
+  final Color clrIcon;
+  final Color bgColor;
+
+  const NotifContainer({
+    required this.judulNotif,
+    required this.statusNotif,
+    required this.waktuNotif,
+    required this.iconNtf,
+    required this.clrIcon,
+    required this.bgColor,
+    super.key, // Perbaikan sintaks key di sini
+  }); // Meneruskan key ke superclass
 
   @override
   State<NotifContainer> createState() => _NotifContainerState();
 }
 
-bool isNotif = false;
-
 class _NotifContainerState extends State<NotifContainer> {
+  bool isNotif = false;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -30,8 +39,6 @@ class _NotifContainerState extends State<NotifContainer> {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        width: double.maxFinite,
-        height: 88,
         decoration: BoxDecoration(
           color: isNotif ? const Color(0xfff5f5f5) : Colors.white,
           border: const Border(
@@ -42,66 +49,60 @@ class _NotifContainerState extends State<NotifContainer> {
           ),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               width: 52,
               height: 52,
-              decoration: ShapeDecoration(
-                color: const Color(0xFFBCBEF3),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
-                ),
+              decoration: BoxDecoration(
+                color: widget.bgColor,
+                shape: BoxShape.circle,
               ),
-              child: const Center(
+              child: Center(
                 child: Icon(
-                  Iconsax.notification,
+                  widget.iconNtf,
                   size: 28,
-                  color: Color(0xFF3E4095),
+                  color: widget.clrIcon,
                 ),
               ),
             ),
-            const SizedBox(
-              width: 16,
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.judulNotif,
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF757F90),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 0.24,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    widget.statusNotif,
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.32,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    widget.waktuNotif,
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF757F90),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 0.24,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.judulNotif,
-                  style: const TextStyle(
-                    color: Color(0xFF757F90),
-                    fontSize: 12,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    height: 0,
-                    letterSpacing: 0.24,
-                  ),
-                ),
-                Text(
-                  widget.statusNotif,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    height: 0,
-                    letterSpacing: 0.32,
-                  ),
-                ),
-                Text(
-                  widget.waktuNotif,
-                  style: const TextStyle(
-                    color: Color(0xFF757F90),
-                    fontSize: 12,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    height: 0,
-                    letterSpacing: 0.24,
-                  ),
-                ),
-              ],
-            )
           ],
         ),
       ),

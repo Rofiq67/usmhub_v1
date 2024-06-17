@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, unnecessary_null_aware_assignments
+// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, unnecessary_null_aware_assignments, avoid_print
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -171,7 +171,7 @@ class AuthController extends GetxController {
       } else {
         isLoading.value = false;
         Get.snackbar(
-          'error',
+          'Gagal',
           json.decode(response.body)['message'],
           snackPosition: SnackPosition.TOP,
         );

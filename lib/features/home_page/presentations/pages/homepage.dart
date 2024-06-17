@@ -5,6 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/aspirasi.dart';
 import 'package:usmhub_v1/features/home_page/domains/controllers/home_controller.dart';
+import 'package:usmhub_v1/features/home_page/presentations/pages/detail_feed.dart';
 import 'package:usmhub_v1/features/home_page/presentations/widgets/banner_widget.dart';
 import 'package:usmhub_v1/features/home_page/presentations/widgets/info_widget.dart';
 import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/pengaduan.dart';
@@ -174,7 +175,7 @@ class _HomePageState extends State<HomePage> {
             Text(
               'Informasi',
               style: GoogleFonts.poppins(
-                color: Color(0xFF1C1C1C),
+                color: const Color(0xFF1C1C1C),
                 fontSize: 24,
                 fontWeight: FontWeight.w500,
                 height: 0,
@@ -199,6 +200,11 @@ class _HomePageState extends State<HomePage> {
                     dateTxt: DateFormat('EEEE, dd MMMM yyyy', 'id_ID')
                         .format(feed.createdAt),
                     imgInfo: 'assets/images/taman_usm.png',
+                    onPressed: () {
+                      Get.to(() => DetailFeed(
+                            feedId: feed.id,
+                          ));
+                    },
                   );
                 }).toList(),
               );

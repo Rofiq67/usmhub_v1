@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 
 class SyaratKetentuan extends StatefulWidget {
@@ -14,63 +16,64 @@ class _SyaratKetentuanState extends State<SyaratKetentuan> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 20),
-          child: Icon(Iconsax.arrow_left),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: const Icon(Iconsax.arrow_left)),
         ),
         centerTitle: true,
         backgroundColor: const Color(0xffF5F5F5),
         scrolledUnderElevation: 0,
-        title: const Text(
+        title: Text(
           'Syarat dan Ketentuan',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Color(0xFF1C1C1C),
+          style: GoogleFonts.poppins(
+            color: const Color(0xFF1C1C1C),
             fontSize: 16,
-            fontFamily: 'Poppins',
             fontWeight: FontWeight.w600,
             height: 0,
             letterSpacing: 0.32,
           ),
         ),
       ),
-      body: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 32,
             ),
             Text(
               'Syarat dan Ketentuan',
-              style: TextStyle(
+              style: GoogleFonts.poppins(
                 color: Colors.black,
                 fontSize: 24,
-                fontFamily: 'Poppins',
                 fontWeight: FontWeight.w500,
                 height: 0,
                 letterSpacing: 0.48,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             SizedBox(
               width: 352,
               child: Text(
                 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia.',
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   color: Colors.black,
                   fontSize: 16,
-                  fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
                   height: 0,
                   letterSpacing: 0.32,
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             SizedBox(
@@ -80,10 +83,9 @@ class _SyaratKetentuanState extends State<SyaratKetentuan> {
                   children: [
                     TextSpan(
                       text: '1. Tulis laporan,',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontSize: 16,
-                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
                         height: 0,
                         letterSpacing: 0.32,
@@ -91,10 +93,9 @@ class _SyaratKetentuanState extends State<SyaratKetentuan> {
                     ),
                     TextSpan(
                       text: ' ',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontSize: 16,
-                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                         height: 0,
                         letterSpacing: 0.32,
@@ -102,10 +103,9 @@ class _SyaratKetentuanState extends State<SyaratKetentuan> {
                     ),
                     TextSpan(
                       text: 'atu keluhan anda dengan jelas dan lengkap.\n',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontSize: 16,
-                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                         height: 0,
                         letterSpacing: 0.64,
@@ -113,10 +113,9 @@ class _SyaratKetentuanState extends State<SyaratKetentuan> {
                     ),
                     TextSpan(
                       text: '2. Verifikasi,',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontSize: 16,
-                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
                         height: 0,
                         letterSpacing: 0.32,
@@ -125,10 +124,9 @@ class _SyaratKetentuanState extends State<SyaratKetentuan> {
                     TextSpan(
                       text:
                           ' dalam 3 hari laporan anda akan diverifikasi dan diteruskan kepada yang berwenang.\n',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontSize: 16,
-                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                         height: 0,
                         letterSpacing: 0.32,
@@ -136,10 +134,9 @@ class _SyaratKetentuanState extends State<SyaratKetentuan> {
                     ),
                     TextSpan(
                       text: '3. Proses tindaklanjut,',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontSize: 16,
-                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
                         height: 0,
                         letterSpacing: 0.32,
@@ -148,10 +145,9 @@ class _SyaratKetentuanState extends State<SyaratKetentuan> {
                     TextSpan(
                       text:
                           ' admin akan menindaklanjuti dan membalas laporan anda.\n',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontSize: 16,
-                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                         height: 0,
                         letterSpacing: 0.32,
@@ -159,10 +155,9 @@ class _SyaratKetentuanState extends State<SyaratKetentuan> {
                     ),
                     TextSpan(
                       text: '4. Beri tanggapan,',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontSize: 16,
-                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
                         height: 0,
                         letterSpacing: 0.32,
@@ -171,10 +166,9 @@ class _SyaratKetentuanState extends State<SyaratKetentuan> {
                     TextSpan(
                       text:
                           ' anda dapat menanggapo kembali balasan yang diberikan oleh admin.\n',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontSize: 16,
-                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                         height: 0,
                         letterSpacing: 0.32,
@@ -182,10 +176,9 @@ class _SyaratKetentuanState extends State<SyaratKetentuan> {
                     ),
                     TextSpan(
                       text: 'Selesai',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontSize: 16,
-                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
                         height: 0,
                         letterSpacing: 0.32,
@@ -194,10 +187,9 @@ class _SyaratKetentuanState extends State<SyaratKetentuan> {
                     TextSpan(
                       text:
                           ', laporan anda akan terus ditindaklanjuti hingga terselesaikan.',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontSize: 16,
-                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
                         height: 0,
                         letterSpacing: 0.32,

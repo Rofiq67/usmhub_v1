@@ -1,7 +1,15 @@
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:usmhub_v1/features/settings_page/presentations/pages/about_me.dart';
+import 'package:usmhub_v1/features/settings_page/presentations/pages/keamanan_akun.dart';
+import 'package:usmhub_v1/features/settings_page/presentations/pages/profile_page.dart';
+import 'package:usmhub_v1/features/settings_page/presentations/pages/report_bug.dart';
+import 'package:usmhub_v1/features/settings_page/presentations/pages/syarat_ketentuan.dart';
+import 'package:usmhub_v1/features/settings_page/presentations/widgets/card_settings.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -22,12 +30,11 @@ class _SettingsPageState extends State<SettingsPage> {
             const SizedBox(
               height: 64,
             ),
-            const Text(
+            Text(
               'Settings',
-              style: TextStyle(
+              style: GoogleFonts.poppins(
                 color: Colors.black,
                 fontSize: 24,
-                fontFamily: 'Poppins',
                 fontWeight: FontWeight.w500,
                 height: 0,
                 letterSpacing: 0.48,
@@ -48,115 +55,19 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               child: Column(
                 children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(332, 51),
-                        backgroundColor: Colors.white,
-                        elevation: 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            SvgPicture.asset('assets/icons/user_bold.svg'),
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            const Text(
-                              'Profil',
-                              style: TextStyle(
-                                color: Color(0xFF1C1C1C),
-                                fontSize: 16,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                                letterSpacing: 0.32,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Icon(
-                          Iconsax.arrow_right_3,
-                        )
-                      ],
-                    ),
+                  CardSettings(
+                    iconSVg: 'assets/icons/user_bold.svg',
+                    txtCard: 'Profil',
+                    onPress: () {
+                      Get.to(() => const ProfilePage());
+                    },
                   ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(332, 51),
-                        backgroundColor: Colors.white,
-                        elevation: 0),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Iconsax.clock4,
-                              size: 25,
-                              color: Color(0xff3E4095),
-                            ),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            Text(
-                              'Riwayat Laporan',
-                              style: TextStyle(
-                                color: Color(0xFF1C1C1C),
-                                fontSize: 16,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                                letterSpacing: 0.32,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Icon(
-                          Iconsax.arrow_right_3,
-                        )
-                      ],
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(332, 51),
-                        backgroundColor: Colors.white,
-                        elevation: 0),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Iconsax.lock,
-                              size: 24,
-                              color: Color(0xff3E4095),
-                            ),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            Text(
-                              'Keamanan Akun',
-                              style: TextStyle(
-                                color: Color(0xFF1C1C1C),
-                                fontSize: 16,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                                letterSpacing: 0.32,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Icon(
-                          Iconsax.arrow_right_3,
-                        )
-                      ],
-                    ),
+                  CardSettings(
+                    iconData: Iconsax.lock,
+                    txtCard: 'Keamanan Akun',
+                    onPress: () {
+                      Get.to(() => const KemananAkun());
+                    },
                   ),
                 ],
               ),
@@ -176,115 +87,26 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               child: Column(
                 children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(332, 51),
-                        backgroundColor: Colors.white,
-                        elevation: 0),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Iconsax.flag_2,
-                              size: 25,
-                              color: Color(0xff3E4095),
-                            ),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            Text(
-                              'Laporkan Bug',
-                              style: TextStyle(
-                                color: Color(0xFF1C1C1C),
-                                fontSize: 16,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                                letterSpacing: 0.32,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Icon(
-                          Iconsax.arrow_right_3,
-                        )
-                      ],
-                    ),
+                  CardSettings(
+                    iconData: Iconsax.flag_2,
+                    txtCard: 'Laporkan Bug',
+                    onPress: () {
+                      Get.to(() => const ReportBug());
+                    },
                   ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(332, 51),
-                        backgroundColor: Colors.white,
-                        elevation: 0),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Iconsax.info_circle,
-                              size: 25,
-                              color: Color(0xff3E4095),
-                            ),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            Text(
-                              'Syarat & Ketentuan',
-                              style: TextStyle(
-                                color: Color(0xFF1C1C1C),
-                                fontSize: 16,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                                letterSpacing: 0.32,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Icon(
-                          Iconsax.arrow_right_3,
-                        )
-                      ],
-                    ),
+                  CardSettings(
+                    iconData: Iconsax.info_circle,
+                    txtCard: 'Syarat & Ketentuan',
+                    onPress: () {
+                      Get.to(() => const SyaratKetentuan());
+                    },
                   ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(332, 51),
-                        backgroundColor: Colors.white,
-                        elevation: 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            SvgPicture.asset('assets/images/usmhub_nobg.svg'),
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            const Text(
-                              'Tentang Kami',
-                              style: TextStyle(
-                                color: Color(0xFF1C1C1C),
-                                fontSize: 16,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                                letterSpacing: 0.32,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Icon(
-                          Iconsax.arrow_right_3,
-                        )
-                      ],
-                    ),
+                  CardSettings(
+                    iconSVg: 'assets/images/usmhub_nobg.svg',
+                    txtCard: 'Tentang Kami',
+                    onPress: () {
+                      Get.to(() => const AboutMe());
+                    },
                   ),
                 ],
               ),
@@ -304,43 +126,11 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               child: Column(
                 children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(332, 51),
-                        backgroundColor: Colors.white,
-                        elevation: 0),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Iconsax.logout,
-                              size: 25,
-                              color: Color(0xffCA2020),
-                            ),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            Text(
-                              'Laporkan Bug',
-                              style: TextStyle(
-                                color: Color(0xFF1C1C1C),
-                                fontSize: 16,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                                letterSpacing: 0.32,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Icon(
-                          Iconsax.arrow_right_3,
-                        )
-                      ],
-                    ),
+                  CardSettings(
+                    iconData: Iconsax.logout,
+                    colorIcon: const Color(0xffCA2020),
+                    txtCard: 'Keluar akun',
+                    onPress: () {},
                   ),
                 ],
               ),

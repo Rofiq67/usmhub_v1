@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'dart:convert';
 
 import 'package:usmhub_v1/constants/constans.dart';
@@ -30,12 +28,12 @@ class HomeController extends GetxController {
         },
       );
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      // print('Response status: ${response.statusCode}');
+      // print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         var data = json.decode(response.body)['feeds'] as List;
-        print('Parsed data: $data');
+        // print('Parsed data: $data');
         feeds.value = data.map((feed) => Feed.fromJson(feed)).toList();
       } else {
         Get.snackbar('Error', 'Failed to fetch feeds');
@@ -57,8 +55,8 @@ class HomeController extends GetxController {
         },
       );
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      // print('Response status: ${response.statusCode}');
+      // print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         var data = json.decode(response.body)['feeds'];

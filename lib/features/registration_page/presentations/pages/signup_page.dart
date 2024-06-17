@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, unused_field
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -136,7 +136,7 @@ class _SignupPageState extends State<SignupPage> {
                     hintTxt: 'NIM (A123456789)',
                     controller: _usernameController,
                     obsureTxt: false,
-                    prefixIcon: Iconsax.user,
+                    prefixIcon: Iconsax.user_tag,
                   ),
                   const SizedBox(
                     height: 8,

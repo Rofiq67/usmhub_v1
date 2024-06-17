@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:usmhub_v1/constants/constans.dart';
 import 'package:usmhub_v1/features/pengaduan_page/data/models/aduan_models.dart';
-import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/riwayat_aduan.dart';
 import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/sent_pengaduan.dart';
 
 class PengaduanController extends GetxController {

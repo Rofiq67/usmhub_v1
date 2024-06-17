@@ -1,75 +1,89 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart'; // Import untuk menggunakan DateFormat
 
 class BubbleChatUser extends StatelessWidget {
-  const BubbleChatUser({super.key});
+  final String txtBubble;
+  final DateTime wktBubble; // Menggunakan DateTime untuk waktu
+  final VoidCallback? onLongPress;
+
+  const BubbleChatUser({
+    Key? key,
+    required this.txtBubble,
+    required this.wktBubble,
+    this.onLongPress,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Container(
-                width: 284,
-                height: 83,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                clipBehavior: Clip.antiAlias,
-                decoration: ShapeDecoration(
-                  color: const Color(0xFF757F90),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-                child: const Text(
-                  'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia.',
-                  style: TextStyle(
-                    color: Color(0xFFF5F5F5),
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    height: 0,
-                    letterSpacing: 0.28,
-                  ),
+    String formattedTime =
+        _formatTime(wktBubble); // Format waktu menggunakan method _formatTime
+
+    return GestureDetector(
+      onLongPress: onLongPress,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 16, right: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Container(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * 0.8,
+                maxHeight: MediaQuery.of(context).size.height * 0.3,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              clipBehavior: Clip.antiAlias,
+              decoration: ShapeDecoration(
+                color: const Color(0xFF3E4095),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              const SizedBox(
-                height: 4,
-              ),
-              const Text(
-                '5 min lalu',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color(0xFF757F90),
-                  fontSize: 12,
-                  fontFamily: 'Poppins',
+              child: Text(
+                txtBubble,
+                style: GoogleFonts.poppins(
+                  color: const Color(0xFFF5F5F5),
+                  fontSize: 14,
                   fontWeight: FontWeight.w400,
                   height: 0,
-                  letterSpacing: 0.24,
+                  letterSpacing: 0.28,
                 ),
               ),
-            ],
-          ),
-          const SizedBox(
-            width: 8,
-          ),
-          SizedBox(
-            width: 53,
-            height: 53,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: Image.asset(
-                'assets/images/pp_mhs.png',
-                fit: BoxFit.cover,
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            Text(
+              formattedTime, // Menggunakan waktu yang sudah diformat
+              textAlign: TextAlign.center,
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF757F90),
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                height: 0,
+                letterSpacing: 0.24,
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
+  }
+
+  String _formatTime(DateTime time) {
+    DateTime now = DateTime.now();
+    DateTime timeToShow = time.toLocal();
+
+    if (now.difference(timeToShow).inHours < 24) {
+      // Jika waktu adalah dalam 24 jam terakhir
+      return DateFormat.jm('id_ID')
+          .format(timeToShow); // Format dengan jam menit
+    } else {
+      // Jika waktu sudah lebih dari 24 jam
+      initializeDateFormatting('id_ID'); // Inisialisasi locale Bahasa Indonesia
+      return DateFormat('EEEE, dd MMMM yyyy HH:mm', 'id_ID').format(timeToShow);
+      // Format dengan hari, tanggal, bulan, tahun, dan jam menit
+    }
   }
 }
