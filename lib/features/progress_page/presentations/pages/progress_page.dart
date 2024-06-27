@@ -21,142 +21,155 @@ class ProgressPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Obx(() {
-        if (progressController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (progressController.riwayatAduan.isEmpty &&
-            progressController.riwayatAspirasi.isEmpty) {
-          return const Center(child: Text('Belum ada riwayat.'));
-        }
+      body: FutureBuilder(
+        future: progressController.fetchRiwayat(), // Memuat data riwayat
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          return Obx(() {
+            if (progressController.riwayatAduan.isEmpty &&
+                progressController.riwayatAspirasi.isEmpty) {
+              return const Center(child: Text('Belum ada riwayat.'));
+            }
 
-        var sedangBerjalan = [
-          ...progressController.riwayatAduan.where((aduan) =>
-              aduan.status == 'Belum Dibaca' ||
-              aduan.status == 'Ditindaklanjuti'),
-          ...progressController.riwayatAspirasi
-              .where((aspirasi) => aspirasi.status == 'Belum Dibaca')
-        ];
+            var sedangBerjalan = [
+              ...progressController.riwayatAduan.where((aduan) =>
+                  aduan.status == 'Belum Dibaca' ||
+                  aduan.status == 'Ditindaklanjuti'),
+              ...progressController.riwayatAspirasi
+                  .where((aspirasi) => aspirasi.status == 'Belum Dibaca')
+            ];
 
-        var selesai = [
-          ...progressController.riwayatAduan
-              .where((aduan) => aduan.status == 'Selesai'),
-          ...progressController.riwayatAspirasi
-              .where((aspirasi) => aspirasi.status == 'Telah diterima')
-        ];
+            var selesai = [
+              ...progressController.riwayatAduan.where((aduan) =>
+                  aduan.status == 'Selesai' || aduan.status == 'Ditolak'),
+              ...progressController.riwayatAspirasi.where((aspirasi) =>
+                  aspirasi.status == 'Telah diterima' ||
+                  aspirasi.status == 'Ditolak')
+            ];
 
-        sedangBerjalan.sort((a, b) {
-          var aDate = a is Aduan ? a.updatedAt : (a as Aspirasi).updatedAt;
-          var bDate = b is Aduan ? b.updatedAt : (b as Aspirasi).updatedAt;
-          return bDate.compareTo(aDate);
-        });
-        selesai.sort((a, b) {
-          var aDate = a is Aduan ? a.updatedAt : (a as Aspirasi).updatedAt;
-          var bDate = b is Aduan ? b.updatedAt : (b as Aspirasi).updatedAt;
-          return bDate.compareTo(aDate);
-        });
+            sedangBerjalan.sort((a, b) {
+              var aDate = a is Aduan ? a.updatedAt : (a as Aspirasi).updatedAt;
+              var bDate = b is Aduan ? b.updatedAt : (b as Aspirasi).updatedAt;
+              return bDate.compareTo(aDate);
+            });
+            selesai.sort((a, b) {
+              var aDate = a is Aduan ? a.updatedAt : (a as Aspirasi).updatedAt;
+              var bDate = b is Aduan ? b.updatedAt : (b as Aspirasi).updatedAt;
+              return bDate.compareTo(aDate);
+            });
 
-        return RefreshIndicator(
-          onRefresh: _refreshHistory,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: ListView(
-              children: [
-                const SizedBox(height: 64),
-                Text(
-                  'Progress',
-                  style: GoogleFonts.poppins(
-                    color: const Color(0xFF1C1C1C),
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                    height: 0,
-                    letterSpacing: 0.48,
-                  ),
+            return RefreshIndicator(
+              onRefresh: _refreshHistory,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ListView(
+                  children: [
+                    const SizedBox(height: 64),
+                    Text(
+                      'Progress',
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFF1C1C1C),
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                        height: 0,
+                        letterSpacing: 0.48,
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    Text(
+                      'Sedang Berjalan',
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFF1C1C1C),
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                        height: 0,
+                        letterSpacing: 0.48,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ...sedangBerjalan.map((item) {
+                      var jenis = item is Aduan
+                          ? item.jenisPengaduan
+                          : (item as Aspirasi).jenisAspirasi;
+                      var status = item is Aduan
+                          ? item.status
+                          : (item as Aspirasi).status;
+                      var createdAt = item is Aduan
+                          ? item.createdAt
+                          : (item as Aspirasi).createdAt;
+                      return CardProgress(
+                        iconCard: item is Aduan
+                            ? Iconsax.microphone
+                            : Iconsax.lamp_on5,
+                        colorIconCard: item is Aduan
+                            ? const Color(0xff3E4095)
+                            : const Color(0xffff8800),
+                        bgIconCard: item is Aduan
+                            ? const Color(0xFFBCBEF3)
+                            : const Color(0xffFEFCB9),
+                        jdlCard: jenis,
+                        stsCard: status,
+                        dateCard: DateFormat('EEEE, dd MMMM yyyy', 'id_ID')
+                            .format(createdAt),
+                        onPressed: () {
+                          Get.to(() => DetailProgress(item: item));
+                        },
+                      );
+                    }),
+                    const SizedBox(height: 32),
+                    Text(
+                      'Selesai',
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFF1C1C1C),
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                        height: 0,
+                        letterSpacing: 0.48,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ...selesai.map((item) {
+                      var jenis = item is Aduan
+                          ? item.jenisPengaduan
+                          : (item as Aspirasi).jenisAspirasi;
+                      var status = item is Aduan
+                          ? item.status
+                          : (item as Aspirasi).status;
+                      var createdAt = item is Aduan
+                          ? item.createdAt
+                          : (item as Aspirasi).createdAt;
+                      return CardProgress(
+                        iconCard: item is Aduan
+                            ? Iconsax.microphone
+                            : Iconsax.lamp_on5,
+                        colorIconCard: item is Aduan
+                            ? const Color(0xff3E4095)
+                            : const Color(0xffff8800),
+                        bgIconCard: item is Aduan
+                            ? const Color(0xFFBCBEF3)
+                            : const Color(0xffFEFCB9),
+                        jdlCard: jenis,
+                        stsCard: status,
+                        dateCard: DateFormat('EEEE, dd MMMM yyyy', 'id_ID')
+                            .format(createdAt),
+                        onPressed: () {
+                          Get.to(() => DetailProgress(item: item));
+                        },
+                      );
+                    }),
+                    const SizedBox(height: 16),
+                  ],
                 ),
-                const SizedBox(height: 32),
-                Text(
-                  'Sedang Berjalan',
-                  style: GoogleFonts.poppins(
-                    color: const Color(0xFF1C1C1C),
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                    height: 0,
-                    letterSpacing: 0.48,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ...sedangBerjalan.map((item) {
-                  var jenis = item is Aduan
-                      ? item.jenisPengaduan
-                      : (item as Aspirasi).jenisAspirasi;
-                  var status =
-                      item is Aduan ? item.status : (item as Aspirasi).status;
-                  var createdAt = item is Aduan
-                      ? item.createdAt
-                      : (item as Aspirasi).createdAt;
-                  return CardProgress(
-                    iconCard:
-                        item is Aduan ? Iconsax.microphone : Iconsax.lamp_on5,
-                    colorIconCard: item is Aduan
-                        ? const Color(0xff3E4095)
-                        : const Color(0xffff8800),
-                    bgIconCard: item is Aduan
-                        ? const Color(0xFFBCBEF3)
-                        : const Color(0xffFEFCB9),
-                    jdlCard: jenis,
-                    stsCard: status,
-                    dateCard: DateFormat('EEEE, dd MMMM yyyy', 'id_ID')
-                        .format(createdAt),
-                    onPressed: () {
-                      Get.to(() => DetailProgress(item: item));
-                    },
-                  );
-                }),
-                const SizedBox(height: 32),
-                Text(
-                  'Selesai',
-                  style: GoogleFonts.poppins(
-                    color: const Color(0xFF1C1C1C),
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                    height: 0,
-                    letterSpacing: 0.48,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ...selesai.map((item) {
-                  var jenis = item is Aduan
-                      ? item.jenisPengaduan
-                      : (item as Aspirasi).jenisAspirasi;
-                  var status =
-                      item is Aduan ? item.status : (item as Aspirasi).status;
-                  var createdAt = item is Aduan
-                      ? item.createdAt
-                      : (item as Aspirasi).createdAt;
-                  return CardProgress(
-                    iconCard:
-                        item is Aduan ? Iconsax.microphone : Iconsax.lamp_on5,
-                    colorIconCard: item is Aduan
-                        ? const Color(0xff3E4095)
-                        : const Color(0xffff8800),
-                    bgIconCard: item is Aduan
-                        ? const Color(0xFFBCBEF3)
-                        : const Color(0xffFEFCB9),
-                    jdlCard: jenis,
-                    stsCard: status,
-                    dateCard: DateFormat('EEEE, dd MMMM yyyy', 'id_ID')
-                        .format(createdAt),
-                    onPressed: () {
-                      Get.to(() => DetailProgress(item: item));
-                    },
-                  );
-                }),
-                const SizedBox(height: 16),
-              ],
-            ),
-          ),
-        );
-      }),
+              ),
+            );
+          });
+        },
+      ),
     );
   }
 }

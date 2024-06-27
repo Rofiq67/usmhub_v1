@@ -12,7 +12,7 @@ class EditCardProfile extends StatelessWidget {
     required this.label,
     required this.iconData,
     required this.controller,
-    this.readOnly = true,
+    this.readOnly = false,
   });
 
   @override

@@ -432,13 +432,19 @@ class _KomentarPageState extends State<KomentarPage> {
                       itemBuilder: (context, index) {
                         final komentar = snapshot.data![index];
                         Widget bubbleWidget;
+                        bool isAdmin = komentar.userRole == 'SuperAdmin' ||
+                            komentar.userRole == 'Admin';
+
                         if (komentar.file != null &&
                             komentar.file!.isNotEmpty) {
                           final extension =
                               komentar.file!.split('.').last.toLowerCase();
                           if (['jpg', 'jpeg', 'png'].contains(extension)) {
-                            bubbleWidget = komentar.userId == 2
+                            bubbleWidget = isAdmin
                                 ? BubbleImageAdmin(
+                                    userRole: komentar.userRole,
+                                    firstName: komentar.firstName,
+                                    lastName: komentar.lastName,
                                     filePath: 'assets/images/taman_usm.png',
                                     txtBubble: komentar.text ?? '',
                                     wktBubble: komentar.updatedAt,
@@ -453,8 +459,11 @@ class _KomentarPageState extends State<KomentarPage> {
                           } else {
                             // Handle other file types like PDF, DOC, DOCX
 
-                            bubbleWidget = komentar.userId == 2
+                            bubbleWidget = isAdmin
                                 ? BubbleFileAdmin(
+                                    userRole: komentar.userRole,
+                                    firstName: komentar.firstName,
+                                    lastName: komentar.lastName,
                                     filePath: 'assets/doc/invoice.pdf',
                                     fileName: 'invoice.pdf',
                                     txtBubble: komentar.text ?? '',
@@ -470,8 +479,11 @@ class _KomentarPageState extends State<KomentarPage> {
                                   ); // Placeholder for now
                           }
                         } else {
-                          bubbleWidget = komentar.userId == 2
+                          bubbleWidget = isAdmin
                               ? BubbleChatAdmin(
+                                  userRole: komentar.userRole,
+                                  firstName: komentar.firstName,
+                                  lastName: komentar.lastName,
                                   txtBubble: komentar.text ?? '',
                                   wktBubble: komentar.updatedAt,
                                 )
@@ -483,7 +495,7 @@ class _KomentarPageState extends State<KomentarPage> {
                                 );
                         }
                         return Align(
-                          alignment: komentar.userId == 2
+                          alignment: isAdmin
                               ? Alignment.centerLeft
                               : Alignment.centerRight,
                           child: bubbleWidget,

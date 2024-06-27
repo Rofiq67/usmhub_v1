@@ -21,6 +21,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final AuthController _authController = Get.put(AuthController());
 
+  bool _passwordVisible = true;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -51,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 width: double.maxFinite,
                 child: Text(
-                  'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia.',
+                  'satu langkah untuk menuju hal yang terbaik',
                   style: GoogleFonts.poppins(
                     color: Colors.black,
                     fontSize: 16,
@@ -75,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                     InputWidget(
                       hintTxt: 'NIM (A123456789)',
                       controller: _usernameController,
-                      obsureTxt: false,
+                      obscureTxt: false,
                       prefixIcon: Iconsax.user,
                     ),
                     const SizedBox(
@@ -84,34 +86,22 @@ class _LoginPageState extends State<LoginPage> {
                     InputWidget(
                       hintTxt: 'Password',
                       controller: _passwordController,
-                      obsureTxt: false,
+                      obscureTxt: _passwordVisible,
                       prefixIcon: Iconsax.password_check,
-                      suffixIcon: Iconsax.eye_slash,
+                      suffixIcon:
+                          _passwordVisible ? Iconsax.eye_slash : Iconsax.eye,
+                      onTapSuffix: () {
+                        setState(() {
+                          _passwordVisible = !_passwordVisible;
+                        });
+                      },
                     ),
 
                     //remember me
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            Checkbox(
-                              activeColor: const Color(0xff3E4095),
-                              value: true,
-                              onChanged: (value) {},
-                            ),
-                            Text(
-                              'Ingatkan saya',
-                              style: GoogleFonts.poppins(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                                letterSpacing: 0.24,
-                              ),
-                            ),
-                          ],
-                        ),
+                        const SizedBox(width: 10),
                         TextButton(
                           onPressed: () {},
                           child: Text(
@@ -174,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                       clrBtn: Colors.white,
                       clrTxt: const Color(0xff3E4095),
                       onPressed: () {
-                        Get.to(const SignupPage());
+                        Get.to(() => const SignupPage());
                       },
                     )
                   ],
@@ -183,72 +173,6 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 16,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Flexible(
-                      child: Divider(
-                    color: Color(0xFF757F90),
-                    thickness: 0.5,
-                    indent: 60,
-                    endIndent: 15,
-                  )),
-                  Text(
-                    'atau masuk ',
-                    style: GoogleFonts.poppins(
-                      color: const Color(0xFF757F90),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                      letterSpacing: 0.24,
-                    ),
-                  ),
-                  const Flexible(
-                      child: Divider(
-                    color: Color(0xFF757F90),
-                    thickness: 0.5,
-                    indent: 15,
-                    endIndent: 60,
-                  )),
-                ],
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 52,
-                    width: 52,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(100)),
-                    child: IconButton(
-                        onPressed: () {
-                          // print('active');
-                        },
-                        icon:
-                            SvgPicture.asset('assets/images/google_logo.svg')),
-                  ),
-                  const SizedBox(
-                    width: 32,
-                  ),
-                  Container(
-                    height: 52,
-                    width: 52,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(100)),
-                    child: IconButton(
-                        onPressed: () {
-                          // print('active');
-                        },
-                        icon: SvgPicture.asset('assets/images/apple_logo.svg')),
-                  )
-                ],
-              )
             ],
           ),
         ),

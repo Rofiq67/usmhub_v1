@@ -235,223 +235,213 @@ class FormAspirasi extends StatelessWidget {
                   )),
               const SizedBox(height: 16),
               Obx(
-                () => Visibility(
-                  visible: !aspirasiController.isLoading.value &&
-                      aspirasiController
-                          .selectedJenisAspirasi.value.isNotEmpty &&
-                      aspirasiController
-                          .selectedProgramStudi.value.isNotEmpty &&
-                      keteranganController.text.isNotEmpty,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text(
-                              'Konfirmasi Aspirasi',
-                              style: GoogleFonts.poppins(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
+                () => ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(
+                            'Konfirmasi Aspirasi',
+                            style: GoogleFonts.poppins(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Kategori aspirasi',
-                                      style: GoogleFonts.poppins(
-                                        color: const Color(0xFF757F90),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        height: 0,
-                                        letterSpacing: 0.32,
-                                      ),
+                          ),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Kategori aspirasi',
+                                    style: GoogleFonts.poppins(
+                                      color: const Color(0xFF757F90),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      height: 0,
+                                      letterSpacing: 0.32,
                                     ),
-                                    Text(
-                                      aspirasiController
-                                          .selectedJenisAspirasi.value,
-                                      style: GoogleFonts.poppins(
-                                        color: const Color(0xFF1c1c1c),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        height: 0,
-                                        letterSpacing: 0.32,
-                                      ),
+                                  ),
+                                  Text(
+                                    aspirasiController
+                                        .selectedJenisAspirasi.value,
+                                    style: GoogleFonts.poppins(
+                                      color: const Color(0xFF1c1c1c),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      height: 0,
+                                      letterSpacing: 0.32,
                                     ),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Tujuan aspirasi',
-                                      style: GoogleFonts.poppins(
-                                        color: const Color(0xFF757F90),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        height: 0,
-                                        letterSpacing: 0.32,
-                                      ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Tujuan aspirasi',
+                                    style: GoogleFonts.poppins(
+                                      color: const Color(0xFF757F90),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      height: 0,
+                                      letterSpacing: 0.32,
                                     ),
-                                    const SizedBox(
-                                      width: 10,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    aspirasiController
+                                        .selectedProgramStudi.value,
+                                    style: GoogleFonts.poppins(
+                                      color: const Color(0xFF1c1c1c),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                      height: 0,
+                                      letterSpacing: 0.32,
                                     ),
-                                    Text(
-                                      aspirasiController
-                                          .selectedProgramStudi.value,
-                                      style: GoogleFonts.poppins(
-                                        color: const Color(0xFF1c1c1c),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                        height: 0,
-                                        letterSpacing: 0.32,
-                                      ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Keterangan',
+                                    style: GoogleFonts.poppins(
+                                      color: const Color(0xFF757F90),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      height: 0,
+                                      letterSpacing: 0.32,
                                     ),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Keterangan',
-                                      style: GoogleFonts.poppins(
-                                        color: const Color(0xFF757F90),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        height: 0,
-                                        letterSpacing: 0.32,
-                                      ),
-                                    ),
-                                    IntrinsicHeight(
-                                      child: SizedBox(
-                                        width: double.infinity,
-                                        child: SingleChildScrollView(
-                                          child: Text(
-                                            keteranganController.text,
-                                            style: GoogleFonts.poppins(
-                                              color: const Color(0xFF1C1C1C),
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              height: 0,
-                                              letterSpacing: 0.32,
-                                            ),
+                                  ),
+                                  IntrinsicHeight(
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      child: SingleChildScrollView(
+                                        child: Text(
+                                          keteranganController.text,
+                                          style: GoogleFonts.poppins(
+                                            color: const Color(0xFF1C1C1C),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            height: 0,
+                                            letterSpacing: 0.32,
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Rating',
-                                      style: GoogleFonts.poppins(
-                                        color: const Color(0xFF757F90),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        height: 0,
-                                        letterSpacing: 0.32,
-                                      ),
-                                    ),
-                                    Text(
-                                      aspirasiController.rating.value
-                                          .toString(),
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        height: 0,
-                                        letterSpacing: 0.32,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            actions: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFF9F9F9),
-                                ),
-                                child: Text(
-                                  'Batal',
-                                  style: GoogleFonts.poppins(
-                                    color: const Color(0xff3E4095),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    height: 0,
-                                    letterSpacing: 0.32,
                                   ),
-                                ),
+                                ],
                               ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  Aspirasi newAspirasi = Aspirasi(
-                                    jenisAspirasi: aspirasiController
-                                        .selectedJenisAspirasi.value,
-                                    programStudi: aspirasiController
-                                        .selectedProgramStudi.value,
-                                    keterangan: keteranganController.text,
-                                    rating: aspirasiController.rating.value,
-                                    id: 0,
-                                    userId: 0,
-                                    status: 'Belum Dibaca',
-                                    createdAt: DateTime.now(),
-                                    updatedAt: DateTime.now(),
-                                  );
-                                  aspirasiController
-                                      .createAspirasi(newAspirasi);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xff3E4095),
-                                ),
-                                child: Text(
-                                  'Kirim',
-                                  style: GoogleFonts.poppins(
-                                    color: const Color(0xFFF9F9F9),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    height: 0,
-                                    letterSpacing: 0.32,
+                              const SizedBox(height: 8),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Rating',
+                                    style: GoogleFonts.poppins(
+                                      color: const Color(0xFF757F90),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      height: 0,
+                                      letterSpacing: 0.32,
+                                    ),
                                   ),
-                                ),
+                                  Text(
+                                    aspirasiController.rating.value.toString(),
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      height: 0,
+                                      letterSpacing: 0.32,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
-                          );
-                        },
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff3E4095),
-                      fixedSize: const Size(353, 60),
-                    ),
-                    child: Text(
-                      'Konfirmasi',
-                      style: GoogleFonts.poppins(
-                        color: const Color(0xFFF9F9F9),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        height: 0,
-                        letterSpacing: 0.32,
-                      ),
+                          ),
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFF9F9F9),
+                              ),
+                              child: Text(
+                                'Batal',
+                                style: GoogleFonts.poppins(
+                                  color: const Color(0xff3E4095),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  height: 0,
+                                  letterSpacing: 0.32,
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                Aspirasi newAspirasi = Aspirasi(
+                                  jenisAspirasi: aspirasiController
+                                      .selectedJenisAspirasi.value,
+                                  programStudi: aspirasiController
+                                      .selectedProgramStudi.value,
+                                  keterangan: keteranganController.text,
+                                  rating: aspirasiController.rating.value,
+                                  id: 0,
+                                  userId: 0,
+                                  status: 'Belum Dibaca',
+                                  createdAt: DateTime.now(),
+                                  updatedAt: DateTime.now(),
+                                );
+                                aspirasiController.createAspirasi(newAspirasi);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xff3E4095),
+                              ),
+                              child: Text(
+                                'Kirim',
+                                style: GoogleFonts.poppins(
+                                  color: const Color(0xFFF9F9F9),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  height: 0,
+                                  letterSpacing: 0.32,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff3E4095),
+                    fixedSize: const Size(353, 60),
+                  ),
+                  child: Text(
+                    'Konfirmasi',
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFFF9F9F9),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      height: 0,
+                      letterSpacing: 0.32,
                     ),
                   ),
                 ),

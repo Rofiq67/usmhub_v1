@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class User {
   final int id;
   final String firstName;
@@ -7,7 +5,7 @@ class User {
   final String username;
   final String email;
   final String imgProfile;
-  final DateTime? tglLahir;
+  final DateTime? tglLahir; // Nullable DateTime
   final String progdi;
   final String gender;
 
@@ -18,7 +16,7 @@ class User {
     required this.username,
     required this.email,
     required this.imgProfile,
-    required this.tglLahir,
+    this.tglLahir,
     required this.progdi,
     required this.gender,
   });
@@ -26,28 +24,31 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
-      firstName: json['first_name'],
-      lastName: json['last_name'],
-      username: json['username'],
-      email: json['email'],
-      imgProfile: json['img_profile'],
+      firstName: json['first_name'] ?? '',
+      lastName: json['last_name'] ?? '',
+      username: json['username'] ?? '',
+      email: json['email'] ?? '',
+      imgProfile: json['img_profile'] ?? '',
       tglLahir:
           json['tgl_lahir'] != null ? DateTime.parse(json['tgl_lahir']) : null,
-      progdi: json['progdi'],
-      gender: json['gender'],
+      progdi: json['progdi'] ?? '',
+      gender: json['gender'] ?? '',
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'first_name': firstName,
-      'last_name': lastName,
-      'username': username,
-      'email': email,
-      'img_profile': imgProfile,
-      'tgl_lahir': tglLahir?.toIso8601String(),
-      'progdi': progdi,
-      'gender': gender,
-    };
-  }
+  toJson() {}
+
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     'id': id.toString(),
+  //     'first_name': lastName,
+  //     'last_name': lastName,
+  //     'username': username,
+  //     'email': email,
+  //     'img_profile': imgProfile,
+  //     'tgl_lahir': tglLahir?.toIso8601String(),
+  //     'progdi': progdi,
+  //     'gender': gender,
+  //   };
+  // }
 }

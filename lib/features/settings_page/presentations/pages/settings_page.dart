@@ -1,9 +1,9 @@
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:usmhub_v1/features/registration_page/domains/controllers/auth.dart';
 import 'package:usmhub_v1/features/settings_page/presentations/pages/about_me.dart';
 import 'package:usmhub_v1/features/settings_page/presentations/pages/keamanan_akun.dart';
 import 'package:usmhub_v1/features/settings_page/presentations/pages/profile_page.dart';
@@ -19,6 +19,11 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  void logout() {
+    // Panggil fungsi logout dari AuthController
+    Get.find<AuthController>().logout();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,14 +64,14 @@ class _SettingsPageState extends State<SettingsPage> {
                     iconSVg: 'assets/icons/user_bold.svg',
                     txtCard: 'Profil',
                     onPress: () {
-                      Get.to(() => const ProfilePage());
+                      Get.to(() => ProfilePage());
                     },
                   ),
                   CardSettings(
                     iconData: Iconsax.lock,
                     txtCard: 'Keamanan Akun',
                     onPress: () {
-                      Get.to(() => const KemananAkun());
+                      Get.to(() => const KeamananAkun());
                     },
                   ),
                 ],
@@ -130,7 +135,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     iconData: Iconsax.logout,
                     colorIcon: const Color(0xffCA2020),
                     txtCard: 'Keluar akun',
-                    onPress: () {},
+                    onPress: () {
+                      logout(); // Panggil fungsi logout saat card ditekan
+                    },
                   ),
                 ],
               ),

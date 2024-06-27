@@ -1,3 +1,5 @@
+import 'package:usmhub_v1/features/settings_page/data/models/user_model.dart';
+
 class Feed {
   final int id;
   final String kategori;
@@ -5,9 +7,10 @@ class Feed {
   final String deskripsi;
   final String? imgbanner;
   final String? docfeed;
-  final bool status;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final int userId; // User ID
+  final User user;
 
   Feed({
     required this.id,
@@ -16,9 +19,10 @@ class Feed {
     required this.deskripsi,
     this.imgbanner,
     this.docfeed,
-    required this.status,
     required this.createdAt,
     required this.updatedAt,
+    required this.userId,
+    required this.user,
   });
 
   factory Feed.fromJson(Map<String, dynamic> json) {
@@ -29,11 +33,12 @@ class Feed {
       deskripsi: json['deskripsi'],
       docfeed: json['doc_feed'],
       imgbanner: json['img_banner'],
-      status: json['status'],
       createdAt: DateTime.parse(
           json['created_at'] ?? DateTime.now().toIso8601String()),
       updatedAt: DateTime.parse(
           json['updated_at'] ?? DateTime.now().toIso8601String()),
+      userId: json['user_id'],
+      user: User.fromJson(json['user']),
     );
   }
   Map<String, dynamic> toJson() {
@@ -44,9 +49,9 @@ class Feed {
       'deskripsi': deskripsi,
       'doc_feed': docfeed ?? '',
       'img_banner': imgbanner ?? '',
-      'status': status,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
+      'user_id': userId.toString(),
     };
   }
 }

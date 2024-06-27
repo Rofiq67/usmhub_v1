@@ -7,12 +7,18 @@ class BubbleImageAdmin extends StatelessWidget {
   final String filePath;
   final String txtBubble;
   final DateTime wktBubble;
+  final String? firstName;
+  final String? lastName;
+  final String userRole;
 
   const BubbleImageAdmin({
     super.key,
     required this.filePath,
     required this.txtBubble,
     required this.wktBubble,
+    this.firstName,
+    this.lastName,
+    required this.userRole,
   });
 
   void _showImageDialog(BuildContext context) {
@@ -46,6 +52,17 @@ class BubbleImageAdmin extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (userRole == 'Superadmin' || userRole == 'Admin') ...[
+            Text(
+              '${firstName ?? ''} ${lastName ?? ''}',
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF757F90),
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SizedBox(height: 4),
+          ],
           GestureDetector(
             onTap: () => _showImageDialog(context),
             child: Container(

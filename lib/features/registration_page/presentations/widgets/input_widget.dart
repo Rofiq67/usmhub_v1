@@ -6,9 +6,10 @@ class InputWidget extends StatelessWidget {
     super.key,
     required this.hintTxt,
     required this.controller,
-    required this.obsureTxt,
+    required this.obscureTxt,
     required this.prefixIcon,
     this.suffixIcon,
+    this.onTapSuffix,
     this.sizeTxt = 16,
     this.onTap,
     this.read = false,
@@ -16,9 +17,10 @@ class InputWidget extends StatelessWidget {
 
   final String hintTxt;
   final TextEditingController controller;
-  final bool obsureTxt;
+  final bool obscureTxt;
   final IconData prefixIcon;
   final IconData? suffixIcon;
+  final VoidCallback? onTapSuffix;
   final double sizeTxt;
   final VoidCallback? onTap;
   final bool read;
@@ -31,7 +33,7 @@ class InputWidget extends StatelessWidget {
         absorbing: onTap != null,
         child: TextFormField(
           controller: controller,
-          obscureText: obsureTxt,
+          obscureText: obscureTxt,
           style: GoogleFonts.poppins(
             color: const Color(0xff3E4095),
             fontSize: 16,
@@ -52,10 +54,13 @@ class InputWidget extends StatelessWidget {
             ),
             suffixIcon: Padding(
               padding: const EdgeInsets.only(right: 23),
-              child: Icon(
-                suffixIcon,
-                color: const Color(0xff3E4095),
-                size: 23,
+              child: IconButton(
+                onPressed: onTapSuffix,
+                icon: Icon(
+                  suffixIcon,
+                  color: const Color(0xff3E4095),
+                  size: 23,
+                ),
               ),
             ),
             focusedBorder: const OutlineInputBorder(

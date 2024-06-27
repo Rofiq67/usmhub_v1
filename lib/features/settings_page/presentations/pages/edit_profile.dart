@@ -1,17 +1,17 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: invalid_use_of_protected_member, avoid_print
 
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:usmhub_v1/features/settings_page/data/models/user_model.dart';
-import 'package:usmhub_v1/features/settings_page/domains/controllers/settings_controller.dart';
+import 'package:intl/intl.dart';
 import 'package:usmhub_v1/features/settings_page/presentations/pages/profile_page.dart';
 import 'package:usmhub_v1/features/settings_page/presentations/widgets/card_edit_tgl_lhr.dart';
 import 'package:usmhub_v1/features/settings_page/presentations/widgets/edit_card_profile.dart';
+import 'package:usmhub_v1/features/registration_page/domains/controllers/auth.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -21,9 +21,7 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  final SettingsController _settingsController = Get.put(SettingsController());
-  User? _user;
-  File? _profileImage;
+  final AuthController authController = Get.find<AuthController>();
 
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
@@ -33,103 +31,74 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController _progdiController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
 
+  File? _profileImage;
+
   @override
   void initState() {
     super.initState();
-    _fetchUserProfile();
+    _loadUserProfile();
   }
 
-  // static const progdiOptions = [
-  //   'Teknik Informatika',
-  //   'Sistem Informasi',
-  //   'Ilmu Komunikasi',
-  //   'Pariwisata',
-  // ];
-
-  // static const genderOptions = [
-  //   'Laki-laki',
-  //   'Perempuan',
-  // ];
-
-  Future<void> _fetchUserProfile() async {
-    try {
-      String token = _settingsController.token;
-      if (token.isNotEmpty) {
-        User userProfile = await _settingsController.getUserProfile(token);
-        setState(() {
-          _user = userProfile;
-          _firstNameController.text = _user!.firstName;
-          _lastNameController.text = _user!.lastName;
-          _usernameController.text = _user!.username;
-          _emailController.text = _user!.email;
-          _tglLahirController.text =
-              _user!.tglLahir != null ? _formatDate(_user!.tglLahir!) : '';
-          _progdiController.text = _user!.progdi;
-          _genderController.text = _user!.gender;
-        });
-      } else {
-        print('Token is not available');
-      }
-    } catch (e) {
-      print('Failed to fetch user profile: $e');
-    }
-  }
-
-  String _formatDate(DateTime date) {
-    return DateFormat('dd MMMM yyyy', 'id_ID').format(date);
+  void _loadUserProfile() {
+    var userProfile = authController.userProfile.value;
+    _firstNameController.text = userProfile['first_name'] ?? '';
+    _lastNameController.text = userProfile['last_name'] ?? '';
+    _usernameController.text = userProfile['username'] ?? '';
+    _emailController.text = userProfile['email'] ?? '';
+    //
+    _tglLahirController.text = DateFormat('dd MMMM yyyy', 'id').format(
+      DateFormat('yyyy-MM-dd').parse(userProfile['tgl_lahir'] ?? ''),
+    );
+    //
+    _progdiController.text = userProfile['progdi'] ?? '';
+    _genderController.text = userProfile['gender'] ?? '';
   }
 
   Future<void> _updateProfile() async {
-    if (_user != null) {
-      try {
-        // Validate and parse the date input
-        DateTime? parsedDate;
-        if (_tglLahirController.text.isNotEmpty) {
-          try {
-            parsedDate = DateFormat('dd MMMM yyyy', 'id_ID')
-                .parse(_tglLahirController.text);
-          } catch (e) {
-            print('Failed to parse date: $e');
-          }
-        }
+    try {
+      await authController.updateProfile(
+        first_name: _firstNameController.text,
+        last_name: _lastNameController.text,
+        username: _usernameController.text,
+        email: _emailController.text,
+        img_profile: _profileImage,
+        tgl_lahir:
+            DateFormat('dd MMMM yyyy', 'id').parse(_tglLahirController.text),
+        progdi: _progdiController.text,
+        gender: _genderController.text,
+      );
 
-        User updatedUser = User(
-          id: _user!.id,
-          firstName: _firstNameController.text,
-          lastName: _lastNameController.text,
-          username: _usernameController.text,
-          email: _emailController.text,
-          imgProfile: _user!.imgProfile,
-          tglLahir: parsedDate,
-          progdi: _progdiController.text,
-          gender: _genderController.text,
-        );
+      // Refresh data setelah pembaruan berhasil
+      _loadUserProfile();
 
-        User user =
-            await _settingsController.updateProfile(updatedUser, _profileImage);
-        setState(() {
-          _user = user;
-        });
+      // Navigasi ke halaman profil setelah berhasil update
+      Get.off(() => ProfilePage());
 
-        if (_profileImage != null) {
-          print('Photo profile successfully updated');
-        }
-
-        // After successful update, navigate back to ProfilePage
-        Get.back();
-        Get.to(() => const ProfilePage());
-
-        Get.snackbar('Success', 'Profile updated successfully');
-      } catch (e) {
-        print('Failed to update user profile: $e');
-        Get.snackbar('Error', 'Failed to update profile');
+      // Cetak pesan di console jika img_profile terunggah
+      if (_profileImage != null) {
+        print('Image profile uploaded successfully.');
       }
+
+      Get.snackbar(
+        'Success',
+        'Profile updated successfully',
+        snackPosition: SnackPosition.TOP,
+      );
+    } catch (e) {
+      print(e.toString());
+      Get.snackbar(
+        'Error',
+        'An error occurred while updating profile. Please try again.',
+        snackPosition: SnackPosition.TOP,
+        margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      );
     }
   }
 
-  Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+  void _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
     if (pickedFile != null) {
       setState(() {
         _profileImage = File(pickedFile.path);
@@ -149,11 +118,11 @@ class _EditProfileState extends State<EditProfile> {
             onPressed: () {
               Get.back();
             },
-            icon: const Icon(Iconsax.arrow_left),
+            icon: const Icon(Icons.arrow_back),
           ),
         ),
         title: Text(
-          'Edit Profil',
+          'Edit Profile',
           textAlign: TextAlign.center,
           style: GoogleFonts.poppins(
             color: const Color(0xFF1C1C1C),
@@ -168,7 +137,7 @@ class _EditProfileState extends State<EditProfile> {
           TextButton(
             onPressed: _updateProfile,
             child: Text(
-              'Simpan',
+              'Save',
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
                 color: Colors.black,
@@ -184,25 +153,29 @@ class _EditProfileState extends State<EditProfile> {
           ),
         ],
       ),
-      body: _user != null
-          ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      height: 64,
-                    ),
-                    Center(
-                      child: Stack(
-                        children: [
-                          Container(
+      body: Obx(() {
+        var userProfile = authController.userProfile.value;
+        return userProfile.isNotEmpty
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(
+                        height: 64,
+                      ),
+                      Center(
+                        child: Stack(
+                          children: [
+                            Container(
                               width: 108,
                               height: 108,
                               clipBehavior: Clip.antiAlias,
-                              decoration: const BoxDecoration(
-                                boxShadow: [
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: const [
                                   BoxShadow(
                                     color: Color(0x3F000000),
                                     blurRadius: 10,
@@ -213,130 +186,123 @@ class _EditProfileState extends State<EditProfile> {
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
-                                child: _profileImage == null
-                                    ? (_user!.imgProfile.isNotEmpty
+                                child: _profileImage != null
+                                    ? Image.file(
+                                        _profileImage!,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : (userProfile['img_profile'] != null &&
+                                            userProfile['img_profile']
+                                                .isNotEmpty
                                         ? Image.asset(
-                                            // Ganti dengan gambar lokal
                                             'assets/images/pp_mhs.png',
                                             fit: BoxFit.cover,
                                           )
-                                        : const Icon(
-                                            Iconsax.profile_circle,
-                                            color: Color(0xFF757F90),
-                                          ))
-                                    : Image.file(
-                                        _profileImage!,
-                                        fit: BoxFit.cover,
-                                      ),
-                              )),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              width: 36,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.withOpacity(0.5),
-                                shape: BoxShape.circle,
-                              ),
-                              child: IconButton(
-                                icon: const Icon(Iconsax.gallery_edit,
-                                    size: 20, color: Colors.white),
-                                onPressed: _pickImage,
+                                        : Container(
+                                            width: 36,
+                                            height: 36,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                            ),
+                                            child: const Icon(
+                                              Iconsax.user,
+                                              size: 40,
+                                              color: Color(0xFF757F90),
+                                            ),
+                                          )),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 10),
-                      width: double.maxFinite,
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                width: 36,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Iconsax.gallery_edit,
+                                    size: 20,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: _pickImage,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      child: Column(
-                        children: [
-                          EditCardProfile(
-                            label: 'Nama Depan',
-                            iconData: Iconsax.user,
-                            controller: _firstNameController,
-                          ),
-                          EditCardProfile(
-                            label: 'Nama Belakang',
-                            iconData: Iconsax.user,
-                            controller: _lastNameController,
-                          ),
-                          EditCardProfile(
-                            label: 'Email',
-                            iconData: Iconsax.sms,
-                            controller: _emailController,
-                          ),
-                          EditCardProfile(
-                            label: 'NIM (readonly)',
-                            iconData: Iconsax.tag_user,
-                            controller: _usernameController,
-                            readOnly: false,
-                          ),
-                          CardEditTglLhr(
-                            label: 'Tanggal lahir',
-                            iconData: Iconsax.calendar,
-                            controller: _tglLahirController,
-                          ),
-                          EditCardProfile(
-                            label: 'Program Studi (readonly)',
-                            iconData: Iconsax.tag_user,
-                            controller: _progdiController,
-                            readOnly: false,
-                          ),
-                          EditCardProfile(
-                            label: 'Jenis Kelamin (readonly)',
-                            iconData: Iconsax.tag_user,
-                            controller: _genderController,
-                            readOnly: false,
-                          ),
-                          // DropdownProfil(
-                          //   label: 'Program Studi',
-                          //   iconData: Iconsax.teacher,
-                          //   value: _progdiController.text,
-                          //   items: progdiOptions,
-                          //   onChanged: (newValue) {
-                          //     setState(() {
-                          //       _progdiController.text = newValue!;
-                          //     });
-                          //   },
-                          // ),
-                          // DropdownProfil(
-                          //   label: 'Jenis Kelamin',
-                          //   iconData: Iconsax.man,
-                          //   value: _genderController.text,
-                          //   items: genderOptions,
-                          //   onChanged: (newValue) {
-                          //     setState(() {
-                          //       _genderController.text = newValue!;
-                          //     });
-                          //   },
-                          // ),
-                        ],
+                      const SizedBox(
+                        height: 16,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                  ],
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 10),
+                        width: double.maxFinite,
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            EditCardProfile(
+                              label: 'Nama depan',
+                              iconData: Iconsax.user,
+                              controller: _firstNameController,
+                              readOnly: true, //boleh di edit
+                            ),
+                            EditCardProfile(
+                              label: 'Nama Belakang',
+                              iconData: Iconsax.user,
+                              controller: _lastNameController,
+                              readOnly: true,
+                            ),
+                            EditCardProfile(
+                              label: 'Email',
+                              iconData: Iconsax.direct,
+                              controller: _emailController,
+                              readOnly: true,
+                            ),
+                            EditCardProfile(
+                              label: 'NIM (Read-only)',
+                              iconData: Iconsax.user_tag,
+                              controller: _usernameController,
+                            ),
+                            CardEditTglLhr(
+                              label: 'Tanggal lahir',
+                              iconData: Iconsax.calendar,
+                              controller: _tglLahirController,
+                            ),
+                            EditCardProfile(
+                              label: 'Program studi (Read-only)',
+                              iconData: Iconsax.teacher,
+                              controller: _progdiController,
+                            ),
+                            EditCardProfile(
+                              label: 'Jenis kelamin',
+                              iconData: Iconsax.man,
+                              controller: _genderController,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 50,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            )
-          : const Center(
-              child: CircularProgressIndicator(),
-            ),
+              )
+            : const Center(
+                child: CircularProgressIndicator(),
+              );
+      }),
     );
   }
 }

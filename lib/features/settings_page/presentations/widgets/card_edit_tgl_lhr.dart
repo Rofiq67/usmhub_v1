@@ -24,23 +24,29 @@ class _CardEditTglLhrState extends State<CardEditTglLhr> {
   @override
   void initState() {
     super.initState();
-    // Inisialisasi _selectedDate dengan nilai dari widget.controller
-    _selectedDate = widget.controller.text.isNotEmpty
-        ? DateFormat('dd MMMM yyyy', 'id_ID').parse(widget.controller.text)
-        : DateTime.now(); // Atau gunakan DateTime.now() jika kosong
+    if (widget.controller.text.isNotEmpty) {
+      try {
+        _selectedDate = DateFormat('yyyy-MM-dd').parse(widget.controller.text);
+        widget.controller.text =
+            DateFormat('dd MMMM yyyy', 'id_ID').format(_selectedDate);
+      } catch (e) {
+        _selectedDate = DateTime.now();
+      }
+    } else {
+      _selectedDate = DateTime.now();
+    }
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate, // Gunakan _selectedDate sebagai tanggal awal
+      initialDate: _selectedDate,
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
     if (picked != null) {
       setState(() {
         _selectedDate = picked;
-        // Tetapkan nilai _selectedDate ke widget.controller.text
         widget.controller.text =
             DateFormat('dd MMMM yyyy', 'id_ID').format(picked);
       });

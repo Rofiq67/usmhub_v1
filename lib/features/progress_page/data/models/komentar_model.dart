@@ -8,6 +8,9 @@ class Komentar {
   final String? file;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final String userRole;
+  final String? firstName;
+  final String? lastName;
 
   Komentar({
     required this.id,
@@ -17,6 +20,9 @@ class Komentar {
     this.file,
     required this.createdAt,
     required this.updatedAt,
+    required this.userRole,
+    this.firstName,
+    this.lastName,
   });
 
   factory Komentar.fromJson(Map<String, dynamic> json) {
@@ -28,6 +34,9 @@ class Komentar {
       file: json['file'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
+      userRole: json['user']?['role'] ?? 'user',
+      firstName: json['user']?['first_name'],
+      lastName: json['user']?['last_name'],
     );
   }
 

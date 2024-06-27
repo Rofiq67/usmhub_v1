@@ -1,22 +1,29 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:usmhub_v1/features/registration_page/domains/controllers/auth.dart';
 import 'package:usmhub_v1/features/settings_page/domains/controllers/settings_controller.dart';
 import 'package:usmhub_v1/features/settings_page/presentations/widgets/input_widget.dart';
 
-class KemananAkun extends StatefulWidget {
-  const KemananAkun({Key? key}) : super(key: key);
+class KeamananAkun extends StatefulWidget {
+  const KeamananAkun({Key? key}) : super(key: key);
 
   @override
-  State<KemananAkun> createState() => _KemananAkunState();
+  State<KeamananAkun> createState() => _KeamananAkunState();
 }
 
-class _KemananAkunState extends State<KemananAkun> {
+class _KeamananAkunState extends State<KeamananAkun> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-  final SettingsController _settingsController = SettingsController();
+  final AuthController _authController = Get.find<
+      AuthController>(); // Ensure AuthController is properly initialized
+
+  bool _passwordVisible = false;
+  bool _confirmPasswordVisible = false;
 
   @override
   void dispose() {
@@ -24,9 +31,6 @@ class _KemananAkunState extends State<KemananAkun> {
     _confirmPasswordController.dispose();
     super.dispose();
   }
-
-  bool _passwordVisible = false;
-  bool _confirmPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +77,7 @@ class _KemananAkunState extends State<KemananAkun> {
             ),
             const SizedBox(height: 4),
             Text(
-              'Masukkan NIM dan Kata Sandi Baru untuk memperbarui password',
+              'Masukkan Kata Sandi Baru dan Konfirmasi',
               style: GoogleFonts.poppins(
                 color: Colors.black,
                 fontSize: 16,
@@ -123,8 +127,10 @@ class _KemananAkunState extends State<KemananAkun> {
 
                       if (password.isNotEmpty && confirmPassword.isNotEmpty) {
                         if (password == confirmPassword) {
-                          _settingsController
-                              .updatePassword(password, confirmPassword)
+                          _authController
+                              .updatePassword(
+                                  password: password,
+                                  password_confirmation: confirmPassword)
                               .then((_) {
                             _passwordController.clear();
                             _confirmPasswordController.clear();
@@ -152,7 +158,7 @@ class _KemananAkunState extends State<KemananAkun> {
                       fixedSize: const Size(353, 60),
                     ),
                     child: Text(
-                      'Kirim',
+                      'Submit',
                       style: GoogleFonts.poppins(
                         color: const Color(0xFFF9F9F9),
                         fontSize: 16,
