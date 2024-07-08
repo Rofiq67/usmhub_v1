@@ -52,7 +52,7 @@ class _PengaduanState extends State<Pengaduan> {
             SizedBox(
               width: 352,
               child: Text(
-                'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia.',
+                'Pengaduan yang baik akan diproses dengan baik, perhatikan petunjuk pengaduan berikut ini',
                 style: GoogleFonts.poppins(
                   color: Colors.black,
                   fontSize: 16,

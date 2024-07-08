@@ -15,6 +15,14 @@ class FormAduan extends StatelessWidget {
 
   FormAduan({super.key});
 
+  void clearForm() {
+    pengaduanController.selectedJenisPengaduan.value = '';
+    pengaduanController.selectedProgramStudi.value = '';
+    pengaduanController.rating.value = 0;
+    pengaduanController.buktiPhoto.value = null;
+    keteranganController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,6 +124,7 @@ class FormAduan extends StatelessWidget {
                       ? null
                       : pengaduanController.selectedProgramStudi.value,
                   listItem: const [
+                    'Dekan FTIK',
                     'Teknik Informatika',
                     'Sistem Informasi',
                     'Ilmu Komunikasi',
@@ -523,6 +532,7 @@ class FormAduan extends StatelessWidget {
                                 updatedAt: DateTime.now(),
                               );
                               pengaduanController.createPengaduan(newAduan);
+                              clearForm();
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xff3E4095),

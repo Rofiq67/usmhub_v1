@@ -13,6 +13,13 @@ class FormAspirasi extends StatelessWidget {
 
   FormAspirasi({super.key});
 
+  void clearForm() {
+    aspirasiController.selectedJenisAspirasi.value = '';
+    aspirasiController.selectedProgramStudi.value = '';
+    aspirasiController.rating.value = 0;
+    keteranganController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,6 +128,7 @@ class FormAspirasi extends StatelessWidget {
                         ? null
                         : aspirasiController.selectedProgramStudi.value,
                     listItem: const [
+                      'Dekan FTIK',
                       'Teknik Informatika',
                       'Sistem Informasi',
                       'Ilmu Komunikasi',
@@ -410,6 +418,7 @@ class FormAspirasi extends StatelessWidget {
                                 updatedAt: DateTime.now(),
                               );
                               aspirasiController.createAspirasi(newAspirasi);
+                              clearForm();
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xff3E4095),
