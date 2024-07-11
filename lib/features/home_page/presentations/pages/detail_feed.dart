@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter_html/flutter_html.dart'; // Import Html widget
 import 'package:usmhub_v1/features/home_page/data/models/feed_models.dart';
 import 'package:usmhub_v1/features/home_page/domains/controllers/home_controller.dart';
+import 'package:usmhub_v1/features/progress_page/presentations/pages/view_pdf.dart';
 
 class DetailFeed extends StatelessWidget {
   final int feedId;
@@ -148,7 +149,10 @@ class DetailFeed extends StatelessWidget {
                         children: [
                           const SizedBox(height: 16),
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Get.to(() => const ViewPdf(
+                                  filePath: 'assets/doc/invoice.pdf'));
+                            },
                             splashColor: Colors.transparent,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

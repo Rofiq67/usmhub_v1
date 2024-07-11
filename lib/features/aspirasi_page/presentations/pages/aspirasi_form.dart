@@ -8,30 +8,62 @@ import 'package:usmhub_v1/features/aspirasi_page/domains/controllers/aspirasi_co
 import 'package:usmhub_v1/features/pengaduan_page/presentations/widgets/drpdown.dart';
 import 'package:usmhub_v1/features/registration_page/domains/controllers/auth.dart';
 
-class FormAspirasi extends StatefulWidget {
-  const FormAspirasi({super.key});
+class AspirasiForm extends StatefulWidget {
+  const AspirasiForm({super.key});
 
   @override
-  State<FormAspirasi> createState() => _FormAspirasiState();
+  _AspirasiFormState createState() => _AspirasiFormState();
 }
 
-class _FormAspirasiState extends State<FormAspirasi> {
-  final AspirasiController aspirasiController = Get.put(AspirasiController());
+class _AspirasiFormState extends State<AspirasiForm> {
+  final AspirasiController aspirasiController = Get.find();
   final AuthController authController = Get.find();
 
   final TextEditingController keteranganController = TextEditingController();
-
-  void clearForm() {
-    aspirasiController.selectedJenisAspirasi.value = '';
-    aspirasiController.selectedProgramStudi.value = '';
-    aspirasiController.rating.value = 0;
-    keteranganController.clear();
-  }
-
+  int rating = 0;
   bool isAnonymous = false;
 
   @override
   Widget build(BuildContext context) {
+    void clearInputs() {
+      setState(() {
+        aspirasiController.selectedJenisAspirasi.value = '';
+        aspirasiController.selectedProgramStudi.value = '';
+        keteranganController.clear();
+        rating = 0;
+        isAnonymous = false;
+      });
+    }
+
+    void submitForm() async {
+      if (aspirasiController.selectedJenisAspirasi.value.isEmpty ||
+          aspirasiController.selectedProgramStudi.value.isEmpty ||
+          keteranganController.text.isEmpty) {
+        Get.snackbar('Error', 'Harap lengkapi semua kolom');
+        return;
+      }
+
+      Aspirasi aspirasi = Aspirasi(
+        id: 0,
+        userId: 0,
+        jenisAspirasi: aspirasiController.selectedJenisAspirasi.value,
+        programStudi: aspirasiController.selectedProgramStudi.value,
+        keterangan: keteranganController.text,
+        rating: rating,
+        status: '',
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        isAnonymous: isAnonymous,
+      );
+
+      bool success = await aspirasiController.createAspirasi(aspirasi);
+      if (success) {
+        // Jika aspirasi berhasil, ambil riwayat aspirasi terbaru
+        aspirasiController.fetchRiwayatAspirasi();
+        clearInputs();
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -47,7 +79,7 @@ class _FormAspirasiState extends State<FormAspirasi> {
         ),
         centerTitle: true,
         title: Text(
-          'Laporan Aspirasi',
+          'Laporkan Aspirasi NEW',
           textAlign: TextAlign.center,
           style: GoogleFonts.poppins(
             color: const Color(0xFF1C1C1C),
@@ -64,9 +96,7 @@ class _FormAspirasiState extends State<FormAspirasi> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
               Text(
                 'Aktifkan anonymous',
                 style: GoogleFonts.poppins(
@@ -107,9 +137,7 @@ class _FormAspirasiState extends State<FormAspirasi> {
                   letterSpacing: 0.32,
                 ),
               ),
-              const SizedBox(
-                height: 4,
-              ),
+              const SizedBox(height: 4),
               Text(
                 'Sesuaikan jenis aspirasi yang ingin anda laporkan.',
                 style: GoogleFonts.poppins(
@@ -120,20 +148,18 @@ class _FormAspirasiState extends State<FormAspirasi> {
                   letterSpacing: 0.28,
                 ),
               ),
-              const SizedBox(
-                height: 8,
-              ),
-              Obx(
-                () => DrpDown(
-                  labelDrp: 'Jenis aspirasi',
-                  value: aspirasiController.selectedJenisAspirasi.value.isEmpty
-                      ? null
-                      : aspirasiController.selectedJenisAspirasi.value,
-                  listItem: const ['Fasilitas', 'Kebijakan', 'Pelayanan'],
-                  onChanged: (newValue) {
+              const SizedBox(height: 8),
+              DrpDown(
+                labelDrp: 'Jenis aspirasi',
+                value: aspirasiController.selectedJenisAspirasi.value.isEmpty
+                    ? null
+                    : aspirasiController.selectedJenisAspirasi.value,
+                listItem: const ['Fasilitas', 'Kebijakan', 'Pelayanan'],
+                onChanged: (newValue) {
+                  setState(() {
                     aspirasiController.selectedJenisAspirasi.value = newValue!;
-                  },
-                ),
+                  });
+                },
               ),
               const SizedBox(height: 16),
               Text(
@@ -146,9 +172,7 @@ class _FormAspirasiState extends State<FormAspirasi> {
                   letterSpacing: 0.32,
                 ),
               ),
-              const SizedBox(
-                height: 4,
-              ),
+              const SizedBox(height: 4),
               Text(
                 'Pilih tujuan sesuai yang bersangkutan.',
                 style: GoogleFonts.poppins(
@@ -159,25 +183,25 @@ class _FormAspirasiState extends State<FormAspirasi> {
                   letterSpacing: 0.28,
                 ),
               ),
-              const SizedBox(
-                height: 8,
+              const SizedBox(height: 8),
+              DrpDown(
+                labelDrp: 'Program Studi',
+                value: aspirasiController.selectedProgramStudi.value.isEmpty
+                    ? null
+                    : aspirasiController.selectedProgramStudi.value,
+                listItem: const [
+                  'Dekan FTIK',
+                  'Teknik Informatika',
+                  'Sistem Informasi',
+                  'Ilmu Komunikasi',
+                  'Pariwisata'
+                ],
+                onChanged: (newValue) {
+                  setState(() {
+                    aspirasiController.selectedProgramStudi.value = newValue!;
+                  });
+                },
               ),
-              Obx(() => DrpDown(
-                    labelDrp: 'Program Studi',
-                    value: aspirasiController.selectedProgramStudi.value.isEmpty
-                        ? null
-                        : aspirasiController.selectedProgramStudi.value,
-                    listItem: const [
-                      'Dekan FTIK',
-                      'Teknik Informatika',
-                      'Sistem Informasi',
-                      'Ilmu Komunikasi',
-                      'Pariwisata'
-                    ],
-                    onChanged: (newValue) {
-                      aspirasiController.selectedProgramStudi.value = newValue!;
-                    },
-                  )),
               const SizedBox(height: 16),
               Text(
                 'Keterangan',
@@ -189,9 +213,7 @@ class _FormAspirasiState extends State<FormAspirasi> {
                   letterSpacing: 0.32,
                 ),
               ),
-              const SizedBox(
-                height: 4,
-              ),
+              const SizedBox(height: 4),
               Text(
                 'Isi keterangan dengan lengkap dan rinci.',
                 style: GoogleFonts.poppins(
@@ -202,9 +224,7 @@ class _FormAspirasiState extends State<FormAspirasi> {
                   letterSpacing: 0.28,
                 ),
               ),
-              const SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               TextField(
                 controller: keteranganController,
                 decoration: InputDecoration(
@@ -235,10 +255,9 @@ class _FormAspirasiState extends State<FormAspirasi> {
                 maxLines: 7,
                 minLines: 1,
                 maxLength: 250,
+                keyboardType: TextInputType.multiline,
               ),
-              const SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               Text(
                 'Rating',
                 style: GoogleFonts.poppins(
@@ -249,11 +268,9 @@ class _FormAspirasiState extends State<FormAspirasi> {
                   letterSpacing: 0.32,
                 ),
               ),
-              const SizedBox(
-                height: 4,
-              ),
+              const SizedBox(height: 4),
               Text(
-                'Berilah penilaian tentang yang anda laporkan',
+                'Berilah penilaian tentang yang anda aspirasi',
                 style: GoogleFonts.poppins(
                   color: const Color(0xFF757F90),
                   fontSize: 14,
@@ -262,28 +279,28 @@ class _FormAspirasiState extends State<FormAspirasi> {
                   letterSpacing: 0.28,
                 ),
               ),
-              const SizedBox(
-                height: 8,
+              const SizedBox(height: 8),
+              RatingBar.builder(
+                initialRating: rating.toDouble(),
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                itemSize: 30.0,
+                itemBuilder: (context, _) => const Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+                onRatingUpdate: (value) {
+                  setState(() {
+                    rating = value.toInt();
+                  });
+                },
               ),
-              Obx(() => RatingBar.builder(
-                    initialRating: aspirasiController.rating.value.toDouble(),
-                    minRating: 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemSize: 30,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    itemBuilder: (context, _) => const Icon(
-                      Iconsax.star1,
-                      color: Colors.amber,
-                    ),
-                    onRatingUpdate: (rating) {
-                      aspirasiController.rating.value = rating.toInt();
-                    },
-                  )),
-              const SizedBox(height: 16),
+              const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
+                  // submitForm();
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -313,9 +330,6 @@ class _FormAspirasiState extends State<FormAspirasi> {
                                     letterSpacing: 0.32,
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 16,
-                                ),
                                 Text(
                                   isAnonymous
                                       ? 'Anonymous'
@@ -333,66 +347,60 @@ class _FormAspirasiState extends State<FormAspirasi> {
                               ],
                             ),
                             const SizedBox(height: 8),
-                            Obx(() => Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Kategori aspirasi',
-                                      style: GoogleFonts.poppins(
-                                        color: const Color(0xFF757F90),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        height: 0,
-                                        letterSpacing: 0.32,
-                                      ),
-                                    ),
-                                    Text(
-                                      aspirasiController
-                                          .selectedJenisAspirasi.value,
-                                      style: GoogleFonts.poppins(
-                                        color: const Color(0xFF1c1c1c),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        height: 0,
-                                        letterSpacing: 0.32,
-                                      ),
-                                    ),
-                                  ],
-                                )),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Kategori aspirasi',
+                                  style: GoogleFonts.poppins(
+                                    color: const Color(0xFF757F90),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                    letterSpacing: 0.32,
+                                  ),
+                                ),
+                                Text(
+                                  aspirasiController
+                                      .selectedJenisAspirasi.value,
+                                  style: GoogleFonts.poppins(
+                                    color: const Color(0xFF1c1c1c),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                    letterSpacing: 0.32,
+                                  ),
+                                ),
+                              ],
+                            ),
                             const SizedBox(height: 8),
-                            Obx(() => Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Tujuan aspirasi',
-                                      style: GoogleFonts.poppins(
-                                        color: const Color(0xFF757F90),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        height: 0,
-                                        letterSpacing: 0.32,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      aspirasiController
-                                          .selectedProgramStudi.value,
-                                      style: GoogleFonts.poppins(
-                                        color: const Color(0xFF1c1c1c),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                        height: 0,
-                                        letterSpacing: 0.32,
-                                      ),
-                                    ),
-                                  ],
-                                )),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Tujuan aspirasi',
+                                  style: GoogleFonts.poppins(
+                                    color: const Color(0xFF757F90),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                    letterSpacing: 0.32,
+                                  ),
+                                ),
+                                Text(
+                                  aspirasiController.selectedProgramStudi.value,
+                                  style: GoogleFonts.poppins(
+                                    color: const Color(0xFF1c1c1c),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                    letterSpacing: 0.32,
+                                  ),
+                                ),
+                              ],
+                            ),
                             const SizedBox(height: 8),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -427,33 +435,31 @@ class _FormAspirasiState extends State<FormAspirasi> {
                               ],
                             ),
                             const SizedBox(height: 8),
-                            Obx(() => Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Rating',
-                                      style: GoogleFonts.poppins(
-                                        color: const Color(0xFF757F90),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        height: 0,
-                                        letterSpacing: 0.32,
-                                      ),
-                                    ),
-                                    Text(
-                                      aspirasiController.rating.value
-                                          .toString(),
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        height: 0,
-                                        letterSpacing: 0.32,
-                                      ),
-                                    ),
-                                  ],
-                                )),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Rating',
+                                  style: GoogleFonts.poppins(
+                                    color: const Color(0xFF757F90),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                    letterSpacing: 0.32,
+                                  ),
+                                ),
+                                Text(
+                                  rating.toString(),
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    height: 0,
+                                    letterSpacing: 0.32,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                         actions: [
@@ -478,22 +484,8 @@ class _FormAspirasiState extends State<FormAspirasi> {
                           ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop();
-                              Aspirasi newAspirasi = Aspirasi(
-                                jenisAspirasi: aspirasiController
-                                    .selectedJenisAspirasi.value,
-                                programStudi: aspirasiController
-                                    .selectedProgramStudi.value,
-                                keterangan: keteranganController.text,
-                                rating: aspirasiController.rating.value,
-                                id: 0,
-                                userId: 0,
-                                status: 'Belum Dibaca',
-                                createdAt: DateTime.now(),
-                                updatedAt: DateTime.now(),
-                                isAnonymous: isAnonymous,
-                              );
-                              aspirasiController.createAspirasi(newAspirasi);
-                              clearForm();
+                              submitForm();
+                              // clearForm();
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xff3E4095),
@@ -531,7 +523,7 @@ class _FormAspirasiState extends State<FormAspirasi> {
               ),
               const SizedBox(
                 height: 32,
-              ),
+              )
             ],
           ),
         ),

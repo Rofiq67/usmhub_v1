@@ -80,15 +80,16 @@ class _EditProfileState extends State<EditProfile> {
       }
 
       Get.snackbar(
-        'Success',
-        'Profile updated successfully',
+        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+        'Berhasil',
+        'Profil telah diperbarui',
         snackPosition: SnackPosition.TOP,
       );
     } catch (e) {
       print(e.toString());
       Get.snackbar(
         'Error',
-        'An error occurred while updating profile. Please try again.',
+        'Gagal memperbarui profil, coba lagi',
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
       );

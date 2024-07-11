@@ -94,7 +94,7 @@ class AuthController extends GetxController {
           snackPosition: SnackPosition.TOP,
           margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
           messageText: Text(
-            'Make sure all data fields are filled',
+            'Pastikan semuanya telah terisi',
             style: GoogleFonts.poppins(
               color: Colors.black,
               fontSize: 16,
@@ -185,6 +185,7 @@ class AuthController extends GetxController {
       } else {
         isLoading.value = false;
         Get.snackbar(
+          margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           'Gagal',
           json.decode(response.body)['message'],
           snackPosition: SnackPosition.TOP,
@@ -400,7 +401,67 @@ class AuthController extends GetxController {
       print(e.toString());
       Get.snackbar(
         'Error',
-        'An error occurred while updating password. Please try again.',
+        'Masukan Password dengan 8 Karakter',
+        snackPosition: SnackPosition.TOP,
+        margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      );
+    }
+  }
+
+  Future<void> forgotPassword({
+    required String username,
+    required String password_baru,
+    required String password_baru_confirmation,
+  }) async {
+    try {
+      isLoading.value = true;
+
+      var data = {
+        'username': username,
+        'password_baru': password_baru,
+        'password_baru_confirmation': password_baru_confirmation,
+      };
+
+      var response = await http.post(
+        Uri.parse('$url/forgot-password'),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(data),
+      );
+
+      isLoading.value = false;
+
+      if (response.statusCode == 200) {
+        Get.snackbar(
+          'Success',
+          'Password has been reset successfully',
+          snackPosition: SnackPosition.TOP,
+        );
+        Get.offAll(() => const LoginPage());
+      } else if (response.statusCode == 404) {
+        Get.snackbar(
+          'Error',
+          'Username tidak ditemukan',
+          snackPosition: SnackPosition.TOP,
+          margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+        );
+      } else {
+        var responseData = json.decode(response.body);
+        Get.snackbar(
+          'Gagal',
+          responseData['message'] ?? 'Username Tidak Ditemukan',
+          snackPosition: SnackPosition.TOP,
+          margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+        );
+      }
+    } catch (e) {
+      isLoading.value = false;
+      print(e.toString());
+      Get.snackbar(
+        'Gagal',
+        'Terjadi Kesalahan Username dan Password.',
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
       );

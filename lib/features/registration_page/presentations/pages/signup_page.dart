@@ -65,13 +65,26 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: const Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Icon(Iconsax.arrow_left),
+            ),
+          ),
+        ),
         body: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const SizedBox(
-                height: 16,
+                height: 8,
               ),
               Text(
                 'Pendaftaran',

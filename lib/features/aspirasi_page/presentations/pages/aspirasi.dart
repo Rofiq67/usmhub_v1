@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/aspirasi_form.dart';
 import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/form_aspirasi.dart';
 
 class AspirasiPage extends StatefulWidget {
@@ -123,7 +124,7 @@ class _AspirasiPageState extends State<AspirasiPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                Get.to(() => FormAspirasi());
+                Get.to(() => const AspirasiForm());
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff3E4095),

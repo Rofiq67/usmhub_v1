@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:usmhub_v1/features/registration_page/domains/controllers/auth.dart';
+import 'package:usmhub_v1/features/registration_page/presentations/pages/forgot_pass.dart';
 import 'package:usmhub_v1/features/registration_page/presentations/pages/signup_page.dart';
 import 'package:usmhub_v1/features/registration_page/presentations/widgets/btn_widget.dart';
 import 'package:usmhub_v1/features/registration_page/presentations/widgets/input_widget.dart';
@@ -103,7 +104,9 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         const SizedBox(width: 10),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(() => const ForgotPass());
+                          },
                           child: Text(
                             'Lupa sandi?',
                             style: GoogleFonts.poppins(

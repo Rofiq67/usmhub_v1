@@ -6,9 +6,8 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:usmhub_v1/features/aspirasi_page/domains/controllers/aspirasi_controller.dart';
 import 'package:usmhub_v1/features/home_page/presentations/pages/homepage.dart';
 import 'package:usmhub_v1/features/notification_page/presentations/pages/notif_page.dart';
-import 'package:usmhub_v1/features/pengaduan_page/domains/controllers/pengaduan_controller.dart';
+import 'package:usmhub_v1/features/pengaduan_page/domains/controllers/aduan_controller.dart';
 import 'package:usmhub_v1/features/progress_page/domains/controllers/komentar_controller.dart';
-import 'package:usmhub_v1/features/progress_page/domains/controllers/progress_controller.dart';
 import 'package:usmhub_v1/features/progress_page/presentations/pages/progress_page.dart';
 import 'package:usmhub_v1/features/registration_page/presentations/pages/login_page.dart';
 import 'package:usmhub_v1/features/settings_page/domains/controllers/settings_controller.dart';
@@ -16,10 +15,10 @@ import 'package:usmhub_v1/features/settings_page/presentations/pages/settings_pa
 
 void main() {
   initializeDateFormatting('id_ID', null).then((_) {
-    Get.put(PengaduanController());
     Get.put(AspirasiController());
     Get.put(KomentarController());
     Get.put(SettingsController());
+    Get.put(AduanController());
     runApp(const MyApp());
   });
 }

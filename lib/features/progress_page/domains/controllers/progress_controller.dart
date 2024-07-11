@@ -25,7 +25,7 @@ class ProgressController extends GetxController {
   }
 
   Future<void> fetchRiwayat() async {
-    await fetchRiwayatAduan();
+    await listRiwayatAduan();
     await fetchRiwayatAspirasi();
     sortRiwayat();
   }
@@ -35,7 +35,7 @@ class ProgressController extends GetxController {
     riwayatAspirasi.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
   }
 
-  Future<void> fetchRiwayatAduan() async {
+  Future<void> listRiwayatAduan() async {
     try {
       isLoading.value = true;
       var token = box.read('token');

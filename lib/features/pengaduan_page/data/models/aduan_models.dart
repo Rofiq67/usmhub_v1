@@ -9,6 +9,7 @@ class Aduan {
   final String status;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final bool isAnonymous;
 
   Aduan({
     required this.id,
@@ -21,6 +22,7 @@ class Aduan {
     required this.status,
     required this.createdAt,
     required this.updatedAt,
+    required this.isAnonymous,
   });
 
   factory Aduan.fromJson(Map<String, dynamic> json) {
@@ -37,6 +39,7 @@ class Aduan {
           json['created_at'] ?? DateTime.now().toIso8601String()),
       updatedAt: DateTime.parse(
           json['updated_at'] ?? DateTime.now().toIso8601String()),
+      isAnonymous: json['is_anonymous'] == 1,
     );
   }
 
@@ -52,6 +55,7 @@ class Aduan {
       'status': status,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
+      'is_anonymous': isAnonymous ? 1 : 0,
     };
   }
 }

@@ -137,19 +137,19 @@ class _KeamananAkunState extends State<KeamananAkun> {
                           }).catchError((error) {
                             Get.snackbar(
                               'Error',
-                              'Failed to update password: $error',
+                              'Gagal update password: $error',
                             );
                           });
                         } else {
                           Get.snackbar(
                             'Error',
-                            'Password fields do not match',
+                            'Password Tidak Sama',
                           );
                         }
                       } else {
                         Get.snackbar(
                           'Error',
-                          'Please fill in all fields',
+                          'Pastikan sudah terisi semuanya',
                         );
                       }
                     },
@@ -158,7 +158,7 @@ class _KeamananAkunState extends State<KeamananAkun> {
                       fixedSize: const Size(353, 60),
                     ),
                     child: Text(
-                      'Submit',
+                      'Ganti Kata Sandi',
                       style: GoogleFonts.poppins(
                         color: const Color(0xFFF9F9F9),
                         fontSize: 16,

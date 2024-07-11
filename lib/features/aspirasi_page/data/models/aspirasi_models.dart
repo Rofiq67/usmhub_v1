@@ -8,6 +8,7 @@ class Aspirasi {
   final String status;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final bool isAnonymous;
 
   Aspirasi({
     required this.id,
@@ -19,6 +20,7 @@ class Aspirasi {
     required this.status,
     required this.createdAt,
     required this.updatedAt,
+    required this.isAnonymous,
   });
 
   factory Aspirasi.fromJson(Map<String, dynamic> json) {
@@ -28,26 +30,31 @@ class Aspirasi {
       jenisAspirasi: json['jenis_aspirasi'] ?? '',
       programStudi: json['program_studi'] ?? '',
       keterangan: json['keterangan'] ?? '',
-      rating: json['rating'] ?? 0,
+      rating: json['rating'] != null
+          ? int.tryParse(json['rating'].toString()) ?? 0
+          : null,
       status: json['status'] ?? '',
       createdAt: DateTime.parse(
           json['created_at'] ?? DateTime.now().toIso8601String()),
       updatedAt: DateTime.parse(
           json['updated_at'] ?? DateTime.now().toIso8601String()),
+      isAnonymous:
+          json['is_anonymous'] == 1, // Convert string "1" to boolean true
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id.toString(),
-      'user_id': userId.toString(),
+      'id': id,
+      'user_id': userId,
       'jenis_aspirasi': jenisAspirasi,
       'program_studi': programStudi,
       'keterangan': keterangan,
-      'rating': rating?.toString() ?? '0',
+      'rating': rating,
       'status': status,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
+      'is_anonymous': isAnonymous ? 1 : 0, // Convert boolean to '1' or '0'
     };
   }
 }

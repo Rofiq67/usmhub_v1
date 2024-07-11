@@ -18,31 +18,40 @@ class AspirasiController extends GetxController {
   var rating = 0.obs;
   var riwayatAspirasi = <Aspirasi>[].obs;
 
-  Future<void> createAspirasi(Aspirasi aspirasi) async {
+  Future<bool> createAspirasi(Aspirasi aspirasi) async {
     try {
       isLoading.value = true;
       var request = http.MultipartRequest('POST', Uri.parse('$url/aspirasi'));
       request.headers['Authorization'] = 'Bearer ${box.read('token')}';
-      request.fields.addAll(aspirasi
-          .toJson()
-          .map((key, value) => MapEntry(key, value.toString())));
+
+      // Convert Map<String, dynamic> to Map<String, String>
+      var aspirasiJson = aspirasi.toJson();
+      var stringFields =
+          aspirasiJson.map((key, value) => MapEntry(key, value.toString()));
+      request.fields.addAll(stringFields);
 
       var response = await request.send();
-      // ignore: unused_local_variable
       var responseData = await http.Response.fromStream(response);
 
       isLoading.value = false;
       if (response.statusCode == 201) {
-        Get.snackbar('Success', 'Aspirasi berhasil dibuat');
+        var jsonResponse = jsonDecode(responseData.body);
+        Get.snackbar(
+          'Berhasil',
+          jsonResponse['message'] ?? 'Aspirasi berhasil dibuat',
+        );
         await fetchRiwayatAspirasi();
         Get.to(() => const SentAspirasi());
+        return true; // Berhasil
       } else {
         Get.snackbar('Error', 'Terjadi kesalahan saat membuat aspirasi');
+        return false; // Gagal
       }
     } catch (e) {
       isLoading.value = false;
       print(e);
       Get.snackbar('Error', 'Terjadi kesalahan saat membuat aspirasi');
+      return false; // Gagal
     }
   }
 

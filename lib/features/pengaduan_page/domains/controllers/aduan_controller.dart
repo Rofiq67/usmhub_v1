@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unnecessary_null_comparison
 
 import 'dart:convert';
 import 'dart:io';
@@ -11,7 +11,7 @@ import 'package:usmhub_v1/constants/constans.dart';
 import 'package:usmhub_v1/features/pengaduan_page/data/models/aduan_models.dart';
 import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/sent_pengaduan.dart';
 
-class PengaduanController extends GetxController {
+class AduanController extends GetxController {
   final isLoading = false.obs;
   final token = ''.obs;
   final box = GetStorage();
@@ -31,13 +31,17 @@ class PengaduanController extends GetxController {
     }
   }
 
-  Future<void> createPengaduan(Aduan aduan) async {
+  Future<bool> createAduan(Aduan aduan) async {
     try {
       isLoading.value = true;
       var request = http.MultipartRequest('POST', Uri.parse('$url/pengaduan'));
       request.headers['Authorization'] = 'Bearer ${box.read('token')}';
-      request.fields.addAll(
-          aduan.toJson().map((key, value) => MapEntry(key, value.toString())));
+
+      // Convert Map<String, dynamic> to Map<String, String>
+      var aduanJson = aduan.toJson();
+      var stringFields =
+          aduanJson.map((key, value) => MapEntry(key, value.toString()));
+      request.fields.addAll(stringFields);
 
       // Periksa jika buktiPhoto tidak null
       if (buktiPhoto.value != null) {
@@ -49,28 +53,31 @@ class PengaduanController extends GetxController {
       }
 
       var response = await request.send();
-      // ignore: unused_local_variable
       var responseData = await http.Response.fromStream(response);
 
       isLoading.value = false;
       if (response.statusCode == 201) {
+        var jsonResponse = jsonDecode(responseData.body);
         Get.snackbar(
-          'Success',
-          'Pengaduan berhasil dibuat',
+          'Berhasil',
+          jsonResponse['message'] ?? 'Pengaduan berhasil dibuat',
         );
-        await fetchRiwayatAduan();
+        await listRiwayatAduan();
         Get.to(() => const SentPengaduan());
+        return true; // Berhasil
       } else {
         Get.snackbar('Error', 'Terjadi kesalahan saat membuat pengaduan');
+        return false; // Gagal
       }
     } catch (e) {
       isLoading.value = false;
       print(e);
       Get.snackbar('Error', 'Terjadi kesalahan saat membuat pengaduan');
+      return false; // Gagal
     }
   }
 
-  Future<void> fetchRiwayatAduan() async {
+  Future<void> listRiwayatAduan() async {
     try {
       isLoading.value = true;
       var token = box.read('token');
