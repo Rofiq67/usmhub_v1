@@ -41,6 +41,7 @@ class Feed {
       user: User.fromJson(json['user']),
     );
   }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id.toString(),

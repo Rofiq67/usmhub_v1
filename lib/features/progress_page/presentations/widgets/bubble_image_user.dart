@@ -1,9 +1,14 @@
+// ignore_for_file: avoid_print
+
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 class BubbleImageUser extends StatelessWidget {
+  final Future<Uint8List?> Function(String) imageKomentar;
   final String filePath;
   final String txtBubble;
   final DateTime wktBubble;
@@ -11,6 +16,7 @@ class BubbleImageUser extends StatelessWidget {
 
   const BubbleImageUser({
     super.key,
+    required this.imageKomentar,
     required this.filePath,
     required this.txtBubble,
     required this.wktBubble,
@@ -27,9 +33,32 @@ class BubbleImageUser extends StatelessWidget {
             height: MediaQuery.of(context).size.height,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                filePath,
-                fit: BoxFit.cover,
+              child: FutureBuilder<Uint8List?>(
+                future:
+                    imageKomentar(filePath), // Mengambil file sebagai Uint8List
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasData && snapshot.data != null) {
+                    try {
+                      return Image.memory(
+                        snapshot.data!,
+                        fit: BoxFit.cover,
+                      );
+                    } catch (e) {
+                      print('Error displaying image: $e');
+                      return Image.asset(
+                        'assets/images/taman_usm.png', // Fallback image
+                        fit: BoxFit.cover,
+                      );
+                    }
+                  } else {
+                    return Image.asset(
+                      'assets/images/taman_usm.png', // Fallback image
+                      fit: BoxFit.cover,
+                    );
+                  }
+                },
               ),
             ),
           ),
@@ -66,9 +95,32 @@ class BubbleImageUser extends StatelessWidget {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    filePath,
-                    fit: BoxFit.cover,
+                  child: FutureBuilder<Uint8List?>(
+                    future: imageKomentar(
+                        filePath), // Mengambil file sebagai Uint8List
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasData && snapshot.data != null) {
+                        try {
+                          return Image.memory(
+                            snapshot.data!,
+                            fit: BoxFit.cover,
+                          );
+                        } catch (e) {
+                          print('Error displaying image: $e');
+                          return Image.asset(
+                            'assets/images/taman_usm.png', // Fallback image
+                            fit: BoxFit.cover,
+                          );
+                        }
+                      } else {
+                        return Image.asset(
+                          'assets/images/taman_usm.png', // Fallback image
+                          fit: BoxFit.cover,
+                        );
+                      }
+                    },
                   ),
                 ),
               ),

@@ -12,6 +12,7 @@ class AspirasiForm extends StatefulWidget {
   const AspirasiForm({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _AspirasiFormState createState() => _AspirasiFormState();
 }
 
@@ -79,7 +80,7 @@ class _AspirasiFormState extends State<AspirasiForm> {
         ),
         centerTitle: true,
         title: Text(
-          'Laporkan Aspirasi NEW',
+          'Laporkan Aspirasi',
           textAlign: TextAlign.center,
           style: GoogleFonts.poppins(
             color: const Color(0xFF1C1C1C),

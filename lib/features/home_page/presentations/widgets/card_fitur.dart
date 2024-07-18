@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/pengaduan.dart';
 
 class CardFitur extends StatelessWidget {
   final String nameFitur;

@@ -8,13 +8,14 @@ class CardEditTglLhr extends StatefulWidget {
   final TextEditingController controller;
 
   const CardEditTglLhr({
-    Key? key,
+    super.key,
     required this.label,
     required this.iconData,
     required this.controller,
-  }) : super(key: key);
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _CardEditTglLhrState createState() => _CardEditTglLhrState();
 }
 

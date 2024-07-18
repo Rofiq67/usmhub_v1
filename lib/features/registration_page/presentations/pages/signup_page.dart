@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,6 +10,7 @@ import 'package:usmhub_v1/features/registration_page/presentations/widgets/dropd
 import 'package:usmhub_v1/features/registration_page/presentations/widgets/input_widget.dart';
 
 class SignupPage extends StatefulWidget {
+  // ignore: use_key_in_widget_constructors
   const SignupPage({Key? key});
 
   @override

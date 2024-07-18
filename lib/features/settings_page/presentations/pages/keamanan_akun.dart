@@ -5,11 +5,10 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:usmhub_v1/features/registration_page/domains/controllers/auth.dart';
-import 'package:usmhub_v1/features/settings_page/domains/controllers/settings_controller.dart';
 import 'package:usmhub_v1/features/settings_page/presentations/widgets/input_widget.dart';
 
 class KeamananAkun extends StatefulWidget {
-  const KeamananAkun({Key? key}) : super(key: key);
+  const KeamananAkun({super.key});
 
   @override
   State<KeamananAkun> createState() => _KeamananAkunState();

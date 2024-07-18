@@ -2,10 +2,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:usmhub_v1/constants/constans.dart';
 import 'package:usmhub_v1/features/home_page/data/models/feed_models.dart';
-import 'package:usmhub_v1/features/settings_page/data/models/user_model.dart';
 
 class HomeController extends GetxController {
   final feeds = <Feed>[].obs;
@@ -15,7 +13,7 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchFeeds(); // Ensure this is called during initialization
+    fetchFeeds();
   }
 
   Future<void> fetchFeeds() async {
@@ -37,6 +35,8 @@ class HomeController extends GetxController {
       if (response.statusCode == 200) {
         var data = json.decode(response.body)['feeds'] as List;
         feeds.value = data.map((feed) => Feed.fromJson(feed)).toList();
+        // Sort feeds by createdAt in descending order
+        feeds.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       } else {
         Get.snackbar('Error', 'Failed to fetch feeds');
       }
@@ -59,10 +59,9 @@ class HomeController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        var data = json.decode(response.body)[
-            'feed']; // Adjust this based on your API response structure
+        var data = json.decode(response.body)['feed'];
         Feed feed = Feed.fromJson(data);
-        // You can now use 'feed' object to display details in UI
+        // ignore: avoid_print
         print('Feed by ID: $feed');
         return feed;
       } else {

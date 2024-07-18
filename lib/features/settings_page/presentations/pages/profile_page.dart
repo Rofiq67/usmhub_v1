@@ -1,14 +1,19 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:usmhub_v1/controllers/getfile_controller.dart';
 import 'package:usmhub_v1/features/registration_page/domains/controllers/auth.dart';
 import 'package:usmhub_v1/features/settings_page/presentations/pages/edit_profile.dart';
 import 'package:usmhub_v1/features/settings_page/presentations/widgets/card_profile.dart';
 
+// ignore: use_key_in_widget_constructors
 class ProfilePage extends StatelessWidget {
   final AuthController authController = Get.find<AuthController>();
+  final GetfileController getFileController = Get.find();
 
   String _formatDate(DateTime? date) {
     if (date != null) {
@@ -93,21 +98,46 @@ class ProfilePage extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Obx(() {
-                    // ignore: invalid_use_of_protected_member
                     var userProfile = authController.userProfile.value;
 
-                    // Memeriksa apakah ada img_profile yang tersedia
                     if (userProfile['img_profile'] != null &&
                         userProfile['img_profile'].toString().isNotEmpty) {
-                      return Image.asset(
-                        'assets/images/pp_mhs.png',
-                        fit: BoxFit.cover,
+                      // Menggunakan FutureBuilder untuk menampilkan gambar dari getImage
+                      return FutureBuilder<Uint8List?>(
+                        future: getFileController
+                            .getImage(userProfile['img_profile'].toString()),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            print('Error fetching image: ${snapshot.error}');
+                            return Image.asset(
+                              'assets/images/pp_mhs.png',
+                              fit: BoxFit.cover,
+                            );
+                          } else if (snapshot.hasData &&
+                              snapshot.data != null) {
+                            try {
+                              return Image.memory(
+                                snapshot.data!,
+                                fit: BoxFit.cover,
+                              );
+                            } catch (e) {
+                              print('Error displaying image: $e');
+                              return Image.asset(
+                                'assets/images/pp_mhs.png',
+                                fit: BoxFit.cover,
+                              );
+                            }
+                          } else {
+                            return Image.asset(
+                              'assets/images/pp_mhs.png',
+                              fit: BoxFit.cover,
+                            );
+                          }
+                        },
                       );
-
-                      // Image.network(
-                      //   userProfile['img_profile'],
-                      //   fit: BoxFit.cover,
-                      // );
                     } else {
                       // jika tidak ada data photo profile
                       return Container(

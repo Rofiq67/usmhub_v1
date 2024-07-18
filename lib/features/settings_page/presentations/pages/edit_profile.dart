@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member, avoid_print
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:usmhub_v1/controllers/getfile_controller.dart';
 import 'package:usmhub_v1/features/settings_page/presentations/pages/profile_page.dart';
 import 'package:usmhub_v1/features/settings_page/presentations/widgets/card_edit_tgl_lhr.dart';
 import 'package:usmhub_v1/features/settings_page/presentations/widgets/edit_card_profile.dart';
@@ -22,6 +24,7 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   final AuthController authController = Get.find<AuthController>();
+  final GetfileController getFileController = Get.find();
 
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
@@ -101,6 +104,7 @@ class _EditProfileState extends State<EditProfile> {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
+      // Baca file sebagai bytes dan simpan dalam _profileImage
       setState(() {
         _profileImage = File(pickedFile.path);
       });
@@ -188,18 +192,91 @@ class _EditProfileState extends State<EditProfile> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
                                 child: _profileImage != null
-                                    ? Image.file(
-                                        _profileImage!,
-                                        fit: BoxFit.cover,
+                                    ? FutureBuilder<Uint8List?>(
+                                        future: _profileImage!.readAsBytes(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return CircularProgressIndicator();
+                                          } else if (snapshot.hasError) {
+                                            print(
+                                                'Error reading image file: ${snapshot.error}');
+                                            return Image.asset(
+                                              'assets/images/pp_mhs.png',
+                                              fit: BoxFit.cover,
+                                            );
+                                          } else if (snapshot.hasData &&
+                                              snapshot.data != null) {
+                                            try {
+                                              return Image.memory(
+                                                snapshot.data!,
+                                                fit: BoxFit.cover,
+                                              );
+                                            } catch (e) {
+                                              print(
+                                                  'Error displaying image: $e');
+                                              return Image.asset(
+                                                'assets/images/pp_mhs.png',
+                                                fit: BoxFit.cover,
+                                              );
+                                            }
+                                          } else {
+                                            return Image.asset(
+                                              'assets/images/pp_mhs.png',
+                                              fit: BoxFit.cover,
+                                            );
+                                          }
+                                        },
                                       )
-                                    : (userProfile['img_profile'] != null &&
+                                    : Obx(() {
+                                        var userProfile =
+                                            authController.userProfile.value;
+
+                                        if (userProfile['img_profile'] !=
+                                                null &&
                                             userProfile['img_profile']
-                                                .isNotEmpty
-                                        ? Image.asset(
-                                            'assets/images/pp_mhs.png',
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Container(
+                                                .isNotEmpty) {
+                                          // Menggunakan FutureBuilder untuk menampilkan gambar dari getImage
+                                          return FutureBuilder<Uint8List?>(
+                                            future: getFileController.getImage(
+                                                userProfile['img_profile']
+                                                    .toString()),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return CircularProgressIndicator();
+                                              } else if (snapshot.hasError) {
+                                                print(
+                                                    'Error fetching image: ${snapshot.error}');
+                                                return Image.asset(
+                                                  'assets/images/pp_mhs.png',
+                                                  fit: BoxFit.cover,
+                                                );
+                                              } else if (snapshot.hasData &&
+                                                  snapshot.data != null) {
+                                                try {
+                                                  return Image.memory(
+                                                    snapshot.data!,
+                                                    fit: BoxFit.cover,
+                                                  );
+                                                } catch (e) {
+                                                  print(
+                                                      'Error displaying image: $e');
+                                                  return Image.asset(
+                                                    'assets/images/pp_mhs.png',
+                                                    fit: BoxFit.cover,
+                                                  );
+                                                }
+                                              } else {
+                                                return Image.asset(
+                                                  'assets/images/pp_mhs.png',
+                                                  fit: BoxFit.cover,
+                                                );
+                                              }
+                                            },
+                                          );
+                                        } else {
+                                          return Container(
                                             width: 36,
                                             height: 36,
                                             decoration: BoxDecoration(
@@ -211,7 +288,9 @@ class _EditProfileState extends State<EditProfile> {
                                               size: 40,
                                               color: Color(0xFF757F90),
                                             ),
-                                          )),
+                                          );
+                                        }
+                                      }),
                               ),
                             ),
                             Positioned(

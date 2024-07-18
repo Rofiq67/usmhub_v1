@@ -9,11 +9,11 @@ class BubbleChatUser extends StatelessWidget {
   final VoidCallback? onLongPress;
 
   const BubbleChatUser({
-    Key? key,
+    super.key,
     required this.txtBubble,
     required this.wktBubble,
     this.onLongPress,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

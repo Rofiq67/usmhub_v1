@@ -1,9 +1,14 @@
+// ignore_for_file: avoid_print
+
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 class BubbleImageAdmin extends StatelessWidget {
+  final Future<Uint8List?> Function(String) imageKomentar;
   final String filePath;
   final String txtBubble;
   final DateTime wktBubble;
@@ -12,14 +17,15 @@ class BubbleImageAdmin extends StatelessWidget {
   final String userRole;
 
   const BubbleImageAdmin({
-    super.key,
+    Key? key,
     required this.filePath,
+    required this.imageKomentar,
     required this.txtBubble,
     required this.wktBubble,
     this.firstName,
     this.lastName,
     required this.userRole,
-  });
+  }) : super(key: key);
 
   void _showImageDialog(BuildContext context) {
     showDialog(
@@ -31,9 +37,37 @@ class BubbleImageAdmin extends StatelessWidget {
             height: MediaQuery.of(context).size.height,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                filePath,
-                fit: BoxFit.cover,
+              child: FutureBuilder<Uint8List?>(
+                future: imageKomentar(filePath),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    print('Error fetching image data: ${snapshot.error}');
+                    return Image.asset(
+                      'assets/images/taman_usm.png', // Fallback image
+                      fit: BoxFit.cover,
+                    );
+                  } else if (snapshot.hasData && snapshot.data != null) {
+                    try {
+                      return Image.memory(
+                        snapshot.data!,
+                        fit: BoxFit.cover,
+                      );
+                    } catch (e) {
+                      print('Error displaying image: $e');
+                      return Image.asset(
+                        'assets/images/taman_usm.png', // Fallback image
+                        fit: BoxFit.cover,
+                      );
+                    }
+                  } else {
+                    return Image.asset(
+                      'assets/images/taman_usm.png', // Fallback image
+                      fit: BoxFit.cover,
+                    );
+                  }
+                },
               ),
             ),
           ),
@@ -44,8 +78,7 @@ class BubbleImageAdmin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String formattedTime =
-        _formatTime(wktBubble); // Format waktu menggunakan method _formatTime
+    String formattedTime = _formatTime(wktBubble);
 
     return Padding(
       padding: const EdgeInsets.only(left: 16, top: 16),
@@ -78,9 +111,37 @@ class BubbleImageAdmin extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.asset(
-                  filePath,
-                  fit: BoxFit.cover,
+                child: FutureBuilder<Uint8List?>(
+                  future: imageKomentar(filePath),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      print('Error fetching image data: ${snapshot.error}');
+                      return Image.asset(
+                        'assets/images/taman_usm.png', // Fallback image
+                        fit: BoxFit.cover,
+                      );
+                    } else if (snapshot.hasData && snapshot.data != null) {
+                      try {
+                        return Image.memory(
+                          snapshot.data!,
+                          fit: BoxFit.cover,
+                        );
+                      } catch (e) {
+                        print('Error displaying image: $e');
+                        return Image.asset(
+                          'assets/images/taman_usm.png', // Fallback image
+                          fit: BoxFit.cover,
+                        );
+                      }
+                    } else {
+                      return Image.asset(
+                        'assets/images/taman_usm.png', // Fallback image
+                        fit: BoxFit.cover,
+                      );
+                    }
+                  },
                 ),
               ),
             ),
@@ -132,14 +193,10 @@ class BubbleImageAdmin extends StatelessWidget {
     DateTime timeToShow = time.toLocal();
 
     if (now.difference(timeToShow).inHours < 24) {
-      // Jika waktu adalah dalam 24 jam terakhir
-      return DateFormat.jm('id_ID')
-          .format(timeToShow); // Format dengan jam menit
+      return DateFormat.jm('id_ID').format(timeToShow);
     } else {
-      // Jika waktu sudah lebih dari 24 jam
-      initializeDateFormatting('id_ID'); // Inisialisasi locale Bahasa Indonesia
+      initializeDateFormatting('id_ID');
       return DateFormat('EEEE, dd MMMM yyyy HH:mm', 'id_ID').format(timeToShow);
-      // Format dengan hari, tanggal, bulan, tahun, dan jam menit
     }
   }
 }

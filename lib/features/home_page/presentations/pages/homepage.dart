@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:usmhub_v1/controllers/getfile_controller.dart';
 import 'package:usmhub_v1/features/aspirasi_page/presentations/pages/aspirasi.dart';
 import 'package:usmhub_v1/features/home_page/data/models/feed_models.dart';
 import 'package:usmhub_v1/features/home_page/domains/controllers/home_controller.dart';
@@ -12,6 +13,7 @@ import 'package:usmhub_v1/features/home_page/presentations/pages/detail_feed.dar
 import 'package:usmhub_v1/features/home_page/presentations/pages/list_feed.dart';
 import 'package:usmhub_v1/features/home_page/presentations/widgets/banner_widget.dart';
 import 'package:usmhub_v1/features/home_page/presentations/widgets/card_fitur.dart';
+import 'package:usmhub_v1/features/home_page/presentations/widgets/circle_user.dart';
 import 'package:usmhub_v1/features/home_page/presentations/widgets/info_widget.dart';
 import 'package:usmhub_v1/features/pengaduan_page/presentations/pages/pengaduan.dart';
 import 'package:usmhub_v1/features/registration_page/domains/controllers/auth.dart';
@@ -27,6 +29,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final HomeController homeController = Get.put(HomeController());
   final AuthController authController = Get.put(AuthController());
+  final GetfileController getFileController = Get.find();
 
   @override
   void initState() {
@@ -70,45 +73,10 @@ class _HomePageState extends State<HomePage> {
                       onTap: () {
                         Get.to(() => ProfilePage());
                       },
-                      child: Obx(() {
-                        var userProfile = authController.userProfile.value;
-                        return Container(
-                          width: 52,
-                          height: 52,
-                          padding: const EdgeInsets.all(10),
-                          clipBehavior: Clip.antiAlias,
-                          decoration: ShapeDecoration(
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            shadows: const [
-                              BoxShadow(
-                                color: Color(0x3F000000),
-                                blurRadius: 10,
-                                offset: Offset(0, 0),
-                                spreadRadius: 0,
-                              )
-                            ],
-                            image: userProfile['img_profile'] != null &&
-                                    userProfile['img_profile'].isNotEmpty
-                                ? const DecorationImage(
-                                    image:
-                                        AssetImage('assets/images/pp_mhs.png'),
-                                    fit: BoxFit.cover,
-                                  )
-                                : null,
-                          ),
-                          child: userProfile['img_profile'] == null ||
-                                  userProfile['img_profile'].isEmpty
-                              ? const Icon(
-                                  Iconsax.user,
-                                  size: 20,
-                                  color: Color(0xFF757F90),
-                                )
-                              : null,
-                        );
-                      }),
+                      child: CircleUser(
+                        imgProfile: authController.userProfile['img_profile'],
+                        getImage: getFileController.getImage,
+                      ),
                     ),
                   ],
                 ),
@@ -195,7 +163,9 @@ class _HomePageState extends State<HomePage> {
                         judulTxt: feed.judul,
                         dateTxt: DateFormat('EEEE, dd MMMM yyyy', 'id_ID')
                             .format(feed.createdAt),
-                        imgInfo: 'assets/images/taman_usm.png',
+                        imgInfo: feed.imgbanner.toString(),
+                        getImage: getFileController
+                            .getImage, // Pass the getImage method
                         onPressed: () {
                           Get.to(() => DetailFeed(feedId: feed.id));
                         },

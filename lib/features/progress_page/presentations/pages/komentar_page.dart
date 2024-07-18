@@ -6,6 +6,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:usmhub_v1/controllers/getfile_controller.dart';
 import 'package:usmhub_v1/features/progress_page/data/models/komentar_model.dart';
 import 'package:usmhub_v1/features/progress_page/domains/controllers/komentar_controller.dart';
 import 'package:usmhub_v1/features/progress_page/presentations/widgets/bubble_chat_admin.dart';
@@ -15,19 +16,20 @@ import 'package:usmhub_v1/features/progress_page/presentations/widgets/bubble_fi
 import 'package:usmhub_v1/features/progress_page/presentations/widgets/bubble_image_user.dart';
 import 'package:usmhub_v1/features/progress_page/presentations/widgets/buble_image_admin.dart';
 import 'package:usmhub_v1/features/progress_page/presentations/widgets/mytextfield.dart';
-import 'dart:io';
 
 class KomentarPage extends StatefulWidget {
   final int aduanId;
   const KomentarPage({super.key, required this.aduanId});
 
   @override
+  // ignore: library_private_types_in_public_api
   _KomentarPageState createState() => _KomentarPageState();
 }
 
 class _KomentarPageState extends State<KomentarPage> {
   late Future<List<Komentar>> _komentarListFuture;
   final KomentarController _komentarController = Get.find();
+  final GetfileController getFileController = Get.find();
   final TextEditingController _textController = TextEditingController();
   PlatformFile? _selectedFile;
   bool _isFilePickerActive = false;
@@ -445,17 +447,24 @@ class _KomentarPageState extends State<KomentarPage> {
                                     userRole: komentar.userRole,
                                     firstName: komentar.firstName,
                                     lastName: komentar.lastName,
-                                    filePath: 'assets/images/taman_usm.png',
+                                    filePath: komentar.file.toString(),
+                                    imageKomentar:
+                                        getFileController.getFileKomentar,
                                     txtBubble: komentar.text ?? '',
                                     wktBubble: komentar.updatedAt,
                                   )
                                 : BubbleImageUser(
-                                    filePath: 'assets/images/taman_usm.png',
+                                    filePath: komentar.file.toString(),
+                                    imageKomentar:
+                                        getFileController.getFileKomentar,
                                     txtBubble: komentar.text ?? '',
                                     wktBubble: komentar.updatedAt,
                                     onLongPress: () =>
                                         _showEditDeleteMenu(komentar),
                                   );
+                            //            imgInfo: feed.imgbanner.toString(),
+                            // getImage: getFileController
+                            //     .getImage,
                           } else {
                             // Handle other file types like PDF, DOC, DOCX
 
@@ -464,14 +473,14 @@ class _KomentarPageState extends State<KomentarPage> {
                                     userRole: komentar.userRole,
                                     firstName: komentar.firstName,
                                     lastName: komentar.lastName,
-                                    filePath: 'assets/doc/invoice.pdf',
-                                    fileName: 'invoice.pdf',
+                                    filePath: komentar.file.toString(),
+                                    fileName: komentar.file!.split('/').last,
                                     txtBubble: komentar.text ?? '',
                                     wktBubble: komentar.updatedAt,
                                   )
                                 : BubbleFileUser(
-                                    filePath: 'assets/doc/invoice.pdf',
-                                    fileName: 'invoice.pdf',
+                                    filePath: komentar.file.toString(),
+                                    fileName: komentar.file!.split('/').last,
                                     txtBubble: komentar.text ?? '',
                                     wktBubble: komentar.updatedAt,
                                     onLongPress: () =>

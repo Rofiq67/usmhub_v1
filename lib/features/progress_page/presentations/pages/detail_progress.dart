@@ -1,12 +1,13 @@
 // ignore_for_file: unused_element
 
-import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:usmhub_v1/controllers/getfile_controller.dart';
 import 'package:usmhub_v1/features/aspirasi_page/data/models/aspirasi_models.dart';
 import 'package:usmhub_v1/features/pengaduan_page/data/models/aduan_models.dart';
 import 'package:usmhub_v1/features/progress_page/domains/controllers/progress_controller.dart';
@@ -26,6 +27,7 @@ class DetailProgress extends StatefulWidget {
 class _DetailProgressState extends State<DetailProgress> {
   final ProgressController progressController = Get.put(ProgressController());
   final AuthController authController = Get.find();
+  final GetfileController getFileController = Get.find();
 
   @override
   void initState() {
@@ -443,10 +445,50 @@ class _DetailProgressState extends State<DetailProgress> {
                                                       child: ClipRRect(
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(16),
-                                                        child: Image.asset(
-                                                          'assets/images/parkir_usm.png',
-                                                          fit: BoxFit.cover,
+                                                                .circular(8),
+                                                        child: FutureBuilder<
+                                                            Uint8List?>(
+                                                          future: getFileController
+                                                              .getImage(widget
+                                                                  .item
+                                                                  .buktiPhoto),
+                                                          builder: (context,
+                                                              AsyncSnapshot<
+                                                                      Uint8List?>
+                                                                  snapshot) {
+                                                            if (snapshot
+                                                                    .connectionState ==
+                                                                ConnectionState
+                                                                    .waiting) {
+                                                              return const Center(
+                                                                  child:
+                                                                      CircularProgressIndicator());
+                                                            }
+                                                            if (snapshot
+                                                                .hasError) {
+                                                              return Center(
+                                                                  child: Text(
+                                                                      'Error: ${snapshot.error}'));
+                                                            }
+                                                            if (snapshot
+                                                                    .hasData &&
+                                                                snapshot.data !=
+                                                                    null) {
+                                                              return Image
+                                                                  .memory(
+                                                                snapshot.data!,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              );
+                                                            } else {
+                                                              return Image
+                                                                  .asset(
+                                                                'assets/images/parkir_usm.png',
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              );
+                                                            }
+                                                          },
                                                         ),
                                                       ),
                                                     ),
@@ -463,7 +505,7 @@ class _DetailProgressState extends State<DetailProgress> {
                           );
                         },
                         child: Container(
-                          width: 353,
+                          width: MediaQuery.of(context).size.width,
                           height: 146,
                           padding: const EdgeInsets.all(16),
                           decoration: ShapeDecoration(
@@ -497,13 +539,13 @@ class _DetailProgressState extends State<DetailProgress> {
                                         ),
                                       ),
                                       const SizedBox(
-                                        width: 45,
+                                        width: 42,
                                       ),
                                       Text(
                                         'Klik detail',
                                         style: GoogleFonts.poppins(
                                           color: const Color(0xFF757F90),
-                                          fontSize: 12,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.w400,
                                           height: 0,
                                           letterSpacing: 0.28,
@@ -519,7 +561,7 @@ class _DetailProgressState extends State<DetailProgress> {
                                       maxLines: 2,
                                       style: GoogleFonts.poppins(
                                         color: Colors.black,
-                                        fontSize: 20,
+                                        fontSize: 24,
                                         fontWeight: FontWeight.w500,
                                         height: 0,
                                         letterSpacing: 0.32,
@@ -535,13 +577,13 @@ class _DetailProgressState extends State<DetailProgress> {
                                             .format(createdAt),
                                         style: GoogleFonts.poppins(
                                           color: const Color(0xFF757F90),
-                                          fontSize: 13,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                           height: 0,
                                           letterSpacing: 0.28,
                                         ),
                                       ),
-                                      const SizedBox(width: 55),
+                                      const SizedBox(width: 40),
                                       Row(
                                         children: [
                                           Container(
@@ -560,7 +602,7 @@ class _DetailProgressState extends State<DetailProgress> {
                                             style: GoogleFonts.poppins(
                                               color: getStatusColor(
                                                   status), // Memanggil fungsi getStatusColor
-                                              fontSize: 14,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.w400,
                                               height: 0,
                                               letterSpacing: 0.28,
@@ -572,17 +614,79 @@ class _DetailProgressState extends State<DetailProgress> {
                                   ),
                                 ],
                               ),
-                              SizedBox(
-                                width: 114,
-                                height: 114,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.asset(
-                                    'assets/images/parkir_usm.png',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
+                              widget.item is Aduan &&
+                                      widget.item.buktiPhoto != null
+                                  ? SizedBox(
+                                      width: 114,
+                                      height: 114,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: FutureBuilder<Uint8List?>(
+                                          future: getFileController
+                                              .getImage(widget.item.buktiPhoto),
+                                          builder: (context,
+                                              AsyncSnapshot<Uint8List?>
+                                                  snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const Center(
+                                                  child:
+                                                      CircularProgressIndicator());
+                                            }
+                                            if (snapshot.hasError) {
+                                              return Center(
+                                                  child: Text(
+                                                      'Error: ${snapshot.error}'));
+                                            }
+                                            if (snapshot.hasData &&
+                                                snapshot.data != null) {
+                                              return Image.memory(
+                                                snapshot.data!,
+                                                fit: BoxFit.cover,
+                                              );
+                                            } else {
+                                              return Image.asset(
+                                                'assets/images/parkir_usm.png',
+                                                fit: BoxFit.cover,
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      width: 114,
+                                      height: 114,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: const Color(0xffFEFCB9),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Iconsax.microphone,
+                                            color: Color(0xffff8800),
+                                            size: 45,
+                                          ),
+                                          Text(
+                                            'aspirasi',
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                            style: GoogleFonts.poppins(
+                                              color: const Color(0xffff8800),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              height: 0,
+                                              letterSpacing: 0.32,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                             ],
                           ),
                         ),

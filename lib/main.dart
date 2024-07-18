@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:usmhub_v1/controllers/getfile_controller.dart';
 import 'package:usmhub_v1/features/aspirasi_page/domains/controllers/aspirasi_controller.dart';
 import 'package:usmhub_v1/features/home_page/presentations/pages/homepage.dart';
 import 'package:usmhub_v1/features/notification_page/presentations/pages/notif_page.dart';
@@ -19,6 +20,7 @@ void main() {
     Get.put(KomentarController());
     Get.put(SettingsController());
     Get.put(AduanController());
+    Get.put(GetfileController());
     runApp(const MyApp());
   });
 }

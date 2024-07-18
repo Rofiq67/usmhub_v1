@@ -33,8 +33,9 @@ class BubbleFileUser extends StatelessWidget {
         padding: const EdgeInsets.only(right: 16, top: 16),
         child: GestureDetector(
           onTap: () {
-            Get.to(() => ViewPdf(
-                filePath: filePath)); // Navigasi ke ViewPdf dengan filePath
+            Get.to(ViewPdf(
+              pdfUrl: filePath,
+            ));
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
