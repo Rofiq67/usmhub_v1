@@ -7,8 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_html/flutter_html.dart'; // Import Html widget
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import 'package:usmhub_v1/constants/constans.dart';
 import 'package:usmhub_v1/features/home_page/data/models/feed_models.dart';
 import 'package:usmhub_v1/features/home_page/domains/controllers/home_controller.dart';
 import 'package:usmhub_v1/features/progress_page/presentations/pages/view_pdf.dart';

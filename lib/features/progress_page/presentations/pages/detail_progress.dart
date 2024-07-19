@@ -233,6 +233,7 @@ class _DetailProgressState extends State<DetailProgress> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             child: SizedBox(
               height: 800,
               width: MediaQuery.of(context).size.width,
